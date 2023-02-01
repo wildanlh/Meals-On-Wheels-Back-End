@@ -29,14 +29,21 @@ import com.lithan.mow.service.CustomerService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class MemberController {
 
-@Autowired MealPackageRepository mealPackageRepository;
+   @Autowired MealPackageRepository mealPackageRepository;
 
-@Autowired OrderRepository orderRepository;
+   @Autowired OrderRepository orderRepository;
 
-@Autowired CustomerRepository customerRepository;
+   @Autowired CustomerRepository customerRepository;
 
-@Autowired CustomerService customersService;
+   @Autowired CustomerService customersService;
 
+
+   @GetMapping("/order")
+   public List<OrderResponse> getOrder() {
+      List<OrderResponse> orderList = new ArrayList<>();      
+      orderRepository.findByOrderdBy(customersService.getCurrentUser()).forEach(order -> orderList.add(new OrderResponse(order)));
+      return orderList;
+   }
 
    @PostMapping("/order/{id}")
    public MessageResponse postOrder(@PathVariable Long id) {
@@ -64,12 +71,5 @@ public class MemberController {
       return new MessageResponse("happy eating");
    }
    
-
-   @GetMapping("/order")
-   public List<OrderResponse> getOrder() {
-      List<OrderResponse> orderList = new ArrayList<>();      
-      orderRepository.findByOrderdBy(customersService.getCurrentUser()).forEach(order -> orderList.add(new OrderResponse(order)));
-      return orderList;
-   }
 
 }
