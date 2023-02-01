@@ -7,5 +7,7 @@ public enum EStatus {
    PREPARING,
    AVAILABLE,
    PENDING,
-   BUSY
+   BUSY,
+   READY_TO_DELIVER,
+   DELIVERY_COMPLATE
 }

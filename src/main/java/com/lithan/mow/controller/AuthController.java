@@ -27,6 +27,7 @@ import com.lithan.mow.security.jwt.JwtUtils;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
+  
   @Autowired AuthenticationManager authenticationManager;
 
   @Autowired CustomerRepository customerRepository;

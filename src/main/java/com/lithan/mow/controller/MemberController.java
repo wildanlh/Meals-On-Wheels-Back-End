@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.service.CustomerService;
 
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
 @RestController
 @RequestMapping("/api/member")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -36,9 +38,9 @@ public class MemberController {
 @Autowired CustomerService customersService;
 
 
-   @PostMapping("/order/{packageId}")
-   public MessageResponse postMyOrder(@PathVariable Long packageId) {
-   MealPackage meal = mealPackageRepository.findById(packageId).get();
+   @PostMapping("/order/{id}")
+   public MessageResponse postOrder(@PathVariable Long id) {
+   MealPackage meal = mealPackageRepository.findById(id).get();
    
 
       Order orderRequest = new Order();
@@ -51,10 +53,20 @@ public class MemberController {
 
       return new MessageResponse("your order have send");
    }
+
+   @PostMapping("/order/{id}/complate")
+   public MessageResponse complateOrder(@PathVariable Long id) {
+      Order order = orderRepository.findById(id).get();
+      order.setStatus(EStatus.COMPLATE);
+
+      orderRepository.save(order);
+
+      return new MessageResponse("happy eating");
+   }
    
 
-   @GetMapping("/my-order")
-   public List<OrderResponse> getMyOrder() {
+   @GetMapping("/order")
+   public List<OrderResponse> getOrder() {
       List<OrderResponse> orderList = new ArrayList<>();      
       orderRepository.findByOrderdBy(customersService.getCurrentUser()).forEach(order -> orderList.add(new OrderResponse(order)));
       return orderList;
