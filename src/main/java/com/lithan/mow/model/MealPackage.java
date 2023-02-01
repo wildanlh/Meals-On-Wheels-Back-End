@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.lithan.mow.payload.request.MealPackageRequest;
+
 import lombok.Data;
 
 @Data
@@ -33,4 +35,17 @@ public class MealPackage {
 
    @Column(name = "package_image")
    private String packageImage;
+
+   public MealPackage(MealPackageRequest meal) {
+      this.id = meal.getId();
+      this.packageName = meal.getPackageName();
+      this.mainCaurse = meal.getMainCaurse();
+      this.salad = meal.getSalad();
+      this.soup = meal.getSoup();
+      this.dessert = meal.getSoup();
+      this.drink = meal.getDrink();
+      this.packageImage = meal.getPackageImage();
+   }
+
+   
 }

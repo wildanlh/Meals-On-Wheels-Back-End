@@ -3,7 +3,9 @@ package com.lithan.mow.payload.request;
 import lombok.Data;
 
 @Data
-public class AddMealPackageRequest {
+public class MealPackageRequest {
+
+    private Long id;
  
     private String packageName;
  
