@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lithan.mow.payload.response.MessageResponse;
+
 @RestController
 @RequestMapping("/api/member")
 @CrossOrigin(origins = "*", maxAge = 3600)
