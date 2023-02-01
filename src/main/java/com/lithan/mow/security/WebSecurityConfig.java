@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.lithan.mow.security.jwt.AuthEntryPoint;
 import com.lithan.mow.security.jwt.AuthTokenFilter;
-import com.lithan.mow.security.service.UserDetailsServiceImpl;
+import com.lithan.mow.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)

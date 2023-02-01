@@ -1,6 +1,9 @@
 package com.lithan.mow;
 
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
@@ -9,14 +12,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.lithan.mow.model.ERole;
-import com.lithan.mow.model.EStatus;
-import com.lithan.mow.model.Role;
-import com.lithan.mow.model.Status;
+import com.lithan.mow.model.Customer;
+import com.lithan.mow.model.MealPackage;
+import com.lithan.mow.model.Order;
+import com.lithan.mow.model.constraint.EGender;
+import com.lithan.mow.model.constraint.ERole;
+import com.lithan.mow.model.constraint.EStatus;
 import com.lithan.mow.repository.CustomerRepository;
+import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.repository.OrderRepository;
-import com.lithan.mow.repository.RoleRepository;
-import com.lithan.mow.repository.StatusRepository;
 
 @SpringBootApplication
 public class MealsOnWheelsBackEndApplication {
@@ -26,38 +30,71 @@ public class MealsOnWheelsBackEndApplication {
 	}
 
 	@Bean
-	CommandLineRunner initRunner(
-			RoleRepository roleRepository,
-			CustomerRepository customerRepository,
-			PasswordEncoder passwordEncoder,
-			OrderRepository orderRepository,
-			StatusRepository statusRepository) {
+	CommandLineRunner initRunner( CustomerRepository customerRepository, PasswordEncoder passwordEncoder, OrderRepository orderRepository, MealPackageRepository mealPackageRepository ) {
 		return args -> {
-			/*
-			 * this bean for initialize the role and status
-			 */
-			if (roleRepository.count() < 2) {
-				List<Role> roles = new ArrayList<>();
-				roles.add(new Role(ERole.ROLE_ADMIN));
-				roles.add(new Role(ERole.ROLE_CAREGIVER));
-				roles.add(new Role(ERole.ROLE_MEMBER));
-				roles.add(new Role(ERole.ROLE_RAIDER));
-				roles.add(new Role(ERole.ROLE_VOLUNTEER));
+			System.out.println("start the app inti the mock data");
 
-				roleRepository.saveAll(roles);
-			}
-			if (statusRepository.count() < 2) {
-				List<Status> status = new ArrayList<>();
-				status.add(new Status(EStatus.AVAILABLE));
-				status.add(new Status(EStatus.BUSY));
-				status.add(new Status(EStatus.COMPLATE));
-				status.add(new Status(EStatus.NOT_AVAILABLE));
-				status.add(new Status(EStatus.ON_THE_WAY));
-				status.add(new Status(EStatus.PENDING));
-				status.add(new Status(EStatus.PREPARING));
+			if(customerRepository.count() > 1) return;
 
-				statusRepository.saveAll(status);
-			}
+			List<Customer> customerList = new ArrayList<>();
+
+			Customer caregiver = new Customer();
+			caregiver.setName("wildan");
+			caregiver.setAddress("java, indonesia");
+			caregiver.setGender(EGender.MALE);
+			caregiver.setRole(ERole.ROLE_CAREGIVER);
+			caregiver.setEmail("wildan@gmail.com");
+			caregiver.setPassword(passwordEncoder.encode("qwerty"));
+
+			Customer member = new Customer();
+			member.setName("bagus");
+			member.setAddress("bali, indonesia");
+			member.setGender(EGender.MALE);
+			member.setRole(ERole.ROLE_MEMBER);
+			member.setEmail("bagus@gmail.com");
+			member.setPassword(passwordEncoder.encode("qwerty"));
+
+			Customer raider = new Customer();
+			raider.setName("stefansim");
+			raider.setAddress("bali, indonesia");
+			raider.setGender(EGender.MALE);
+			raider.setRole(ERole.ROLE_RAIDER);
+			raider.setEmail("stefansim@gmail.com");
+			raider.setPassword(passwordEncoder.encode("qwerty"));
+			
+			Customer volunteer = new Customer();
+			volunteer.setName("norman");
+			volunteer.setAddress("kualalumpur, malaysia");
+			volunteer.setGender(EGender.MALE);
+			volunteer.setRole(ERole.ROLE_VOLUNTEER);
+			volunteer.setEmail("norman@gmail.com");
+			volunteer.setPassword(passwordEncoder.encode("qwerty"));
+
+			customerList.addAll(Arrays.asList(caregiver, member, raider, volunteer));
+
+			customerRepository.saveAll(customerList);
+
+			MealPackage packageA = new MealPackage();
+			packageA.setDessert("puding");
+			packageA.setDrink("cocacola");
+			packageA.setMainCaurse("fried chiken");
+			packageA.setPackageName("Package A");
+			packageA.setSalad("kol");
+			packageA.setSoup("sayur bening");
+
+			mealPackageRepository.save(packageA);
+
+			Order order = new Order();
+			order.setDeliveredBy(raider);
+			order.setMealPackage(packageA);
+			order.setOrderdBy(member);
+			order.setOrderdOn(new Date());
+			order.setPreparedBy(caregiver);
+			order.setStatus(EStatus.COMPLATE);
+
+			orderRepository.save(order);
+
+
 		};
 	}
 

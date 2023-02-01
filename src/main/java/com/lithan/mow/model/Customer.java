@@ -1,17 +1,19 @@
 package com.lithan.mow.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import com.lithan.mow.model.constraint.EGender;
+import com.lithan.mow.model.constraint.ERole;
+import com.lithan.mow.model.constraint.EStatus;
 
 import lombok.Data;
 
@@ -23,20 +25,24 @@ public class Customer {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
+   private String name;
+
    private String email;
 
    private String password;
 
    private String address;
 
-   @ManyToMany
-   @JoinTable(joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = @UniqueConstraint(columnNames = {
-         "customer_id", "role_id" }))
-   private List<Role> roles = new ArrayList<>();
+   @Enumerated(EnumType.STRING)
+   private EGender gender;
 
-   @ManyToMany
-   @JoinTable(joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "status_id"), uniqueConstraints = @UniqueConstraint(columnNames = {
-         "customer_id", "status_id" }))
-   private List<Status> status = new ArrayList<>();
+   @Enumerated(EnumType.STRING)
+   private ERole role;
+
+   @Enumerated(EnumType.STRING)
+   private EStatus status;
+
+   @Column(name = "image_url")
+   private String imageUrl;
 
 }

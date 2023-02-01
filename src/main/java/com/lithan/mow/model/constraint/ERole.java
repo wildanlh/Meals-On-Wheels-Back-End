@@ -1,4 +1,4 @@
-package com.lithan.mow.model;
+package com.lithan.mow.model.constraint;
 
 public enum ERole {
    ROLE_VOLUNTEER,
