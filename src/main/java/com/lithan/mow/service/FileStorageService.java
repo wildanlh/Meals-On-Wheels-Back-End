@@ -3,7 +3,6 @@ package com.lithan.mow.service;
 import com.lithan.mow.exception.FileStorageException;
 import com.lithan.mow.exception.MyFileNotFoundException;
 import com.lithan.mow.property.FileStorageProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ public class FileStorageService {
 
     private final Path fileStorageLocation;
 
-    @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
