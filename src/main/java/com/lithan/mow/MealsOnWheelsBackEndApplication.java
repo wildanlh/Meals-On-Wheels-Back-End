@@ -33,7 +33,9 @@ public class MealsOnWheelsBackEndApplication {
 			OrderRepository orderRepository,
 			StatusRepository statusRepository) {
 		return args -> {
-
+			/*
+			 * this bean for initialize the role and status
+			 */
 			if (roleRepository.count() < 2) {
 				List<Role> roles = new ArrayList<>();
 				roles.add(new Role(ERole.ROLE_ADMIN));
@@ -43,9 +45,7 @@ public class MealsOnWheelsBackEndApplication {
 				roles.add(new Role(ERole.ROLE_VOLUNTEER));
 
 				roleRepository.saveAll(roles);
-
 			}
-
 			if (statusRepository.count() < 2) {
 				List<Status> status = new ArrayList<>();
 				status.add(new Status(EStatus.AVAILABLE));
