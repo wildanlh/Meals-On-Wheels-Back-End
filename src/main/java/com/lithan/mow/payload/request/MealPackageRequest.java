@@ -11,11 +11,7 @@ public class MealPackageRequest {
 
     private String packageName;
 
- 
-    private String mainCourse;
- 
-
-
+    
     private String salad;
 
     private String soup;
