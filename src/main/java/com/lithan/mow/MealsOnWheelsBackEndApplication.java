@@ -74,7 +74,15 @@ public class MealsOnWheelsBackEndApplication {
 			volunteer.setEmail("norman@gmail.com");
 			volunteer.setPassword(passwordEncoder.encode("qwerty"));
 
-			customerList.addAll(Arrays.asList(member, raider, volunteer));
+			Customer admin = new Customer();
+			admin.setName("admin");
+			admin.setAddress("singapore");
+			admin.setGender(EGender.MALE);
+			admin.setRole(ERole.ROLE_ADMIN);
+			admin.setEmail("admin@gmail.com");
+			admin.setPassword(passwordEncoder.encode("qwerty"));
+
+			customerList.addAll(Arrays.asList(member, raider, volunteer, admin));
 
 			customerRepository.saveAll(customerList);
 
@@ -82,21 +90,74 @@ public class MealsOnWheelsBackEndApplication {
 			packageA.setDessert("puding");
 			packageA.setDrink("cocacola");
 			packageA.setMainCourse("fried chiken");
-			packageA.setPackageName("Package A");
+			packageA.setPackageName("Package Ayam");
 			packageA.setSalad("kol");
 			packageA.setSoup("sayur bening");
 
-			mealPackageRepository.save(packageA);
+			MealPackage packageB = new MealPackage();
+			packageB.setDessert("puding");
+			packageB.setDrink("cocacola");
+			packageB.setMainCourse("fried chiken");
+			packageB.setPackageName("Package Babi");
+			packageB.setSalad("kol");
+			packageB.setSoup("sayur bening");
+
+			MealPackage packageC = new MealPackage();
+			packageC.setDessert("puding");
+			packageC.setDrink("cocacola");
+			packageC.setMainCourse("fried chiken");
+			packageC.setPackageName("Package Cetik");
+			packageC.setSalad("kol");
+			packageC.setSoup("sayur bening");
+
+			mealPackageRepository.saveAll(Arrays.asList(packageA, packageB, packageC));
+
+			Order pending = new Order();
+			pending.setMealPackage(packageA);
+			pending.setOrderdBy(member);
+			pending.setOrderdOn(new Date());
+			pending.setPreparedBy(partner);
+			pending.setStatus(EStatus.PENDING);
+
+			Order prepare = new Order();
+			prepare.setMealPackage(packageB);
+			prepare.setOrderdBy(member);
+			prepare.setOrderdOn(new Date());
+			prepare.setPreparedBy(partner);
+			prepare.setStatus(EStatus.PREPARING);
+
+			Order readyToDeliver = new Order();
+			readyToDeliver.setMealPackage(packageC);
+			readyToDeliver.setOrderdBy(member);
+			readyToDeliver.setOrderdOn(new Date());
+			readyToDeliver.setPreparedBy(partner);
+			readyToDeliver.setStatus(EStatus.READY_TO_DELIVER);
+
+			Order onDeliver = new Order();
+			onDeliver.setDeliveredBy(raider);
+			onDeliver.setMealPackage(packageA);
+			onDeliver.setOrderdBy(member);
+			onDeliver.setOrderdOn(new Date());
+			onDeliver.setPreparedBy(partner);
+			onDeliver.setStatus(EStatus.ON_DELIVERY);
+
+			Order deliverComplate = new Order();
+			deliverComplate.setDeliveredBy(raider);
+			deliverComplate.setMealPackage(packageB);
+			deliverComplate.setOrderdBy(member);
+			deliverComplate.setOrderdOn(new Date());
+			deliverComplate.setPreparedBy(partner);
+			deliverComplate.setStatus(EStatus.DELIVERY_COMPLETE);
 
 			Order order = new Order();
 			order.setDeliveredBy(raider);
-			order.setMealPackage(packageA);
+			order.setMealPackage(packageC);
 			order.setOrderdBy(member);
 			order.setOrderdOn(new Date());
 			order.setPreparedBy(partner);
-			order.setStatus(EStatus.COMPLETE);
+			order.setStatus(EStatus.ORDER_COMPLETE);
 
-			orderRepository.save(order);
+			orderRepository.saveAll(Arrays.asList(pending, prepare, readyToDeliver, onDeliver, deliverComplate, order));
 
 		};
 	}

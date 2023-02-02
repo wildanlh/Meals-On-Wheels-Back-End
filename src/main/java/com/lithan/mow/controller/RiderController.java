@@ -46,7 +46,7 @@ public class RiderController {
         Order order = orderRepository.findById(id).get();
         Customer raider = customerService.getCurrentUser();
 
-        order.setStatus(EStatus.ON_THE_WAY);
+        order.setStatus(EStatus.ON_DELIVERY);
         raider.setStatus(EStatus.BUSY);
         order.setDeliveredBy(raider);
 

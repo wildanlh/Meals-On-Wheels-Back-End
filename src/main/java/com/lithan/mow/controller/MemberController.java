@@ -41,11 +41,22 @@ public class MemberController {
    @Autowired
    CustomerService customersService;
 
-   @GetMapping("/order")
-   public List<OrderResponse> getOrder() {
+   @GetMapping("/order/all")
+   public List<OrderResponse> getAllOrder() {
       List<OrderResponse> orderList = new ArrayList<>();
       orderRepository.findByOrderdBy(customersService.getCurrentUser())
             .forEach(order -> orderList.add(new OrderResponse(order)));
+      return orderList;
+   }
+
+   @GetMapping("/order")
+   public List<OrderResponse> getOrder() {
+      List<OrderResponse> orderList = new ArrayList<>();
+      orderRepository.findByOrderdBy(customersService.getCurrentUser()).forEach(order -> {
+         if (!order.getStatus().equals(EStatus.ORDER_COMPLETE)) {
+            orderList.add(new OrderResponse(order));
+         }
+      });
       return orderList;
    }
 
@@ -67,7 +78,7 @@ public class MemberController {
    @PostMapping("/order/{id}/complete")
    public MessageResponse complateOrder(@PathVariable Long id) {
       Order order = orderRepository.findById(id).get();
-      order.setStatus(EStatus.COMPLETE);
+      order.setStatus(EStatus.ORDER_COMPLETE);
 
       orderRepository.save(order);
 
