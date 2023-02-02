@@ -35,5 +35,5 @@ public class Donate {
     private String cw;
 
     private String message;
-    
+
 }

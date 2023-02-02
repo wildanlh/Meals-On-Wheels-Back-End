@@ -27,31 +27,35 @@ import com.lithan.mow.security.jwt.JwtUtils;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
-  
-  @Autowired AuthenticationManager authenticationManager;
 
-  @Autowired CustomerRepository customerRepository;
+  @Autowired
+  AuthenticationManager authenticationManager;
 
-  @Autowired PasswordEncoder encoder;
+  @Autowired
+  CustomerRepository customerRepository;
 
-  @Autowired JwtUtils jwtUtils;
+  @Autowired
+  PasswordEncoder encoder;
+
+  @Autowired
+  JwtUtils jwtUtils;
 
   @PostMapping("/signin")
   public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-    
-    Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+    Authentication auth = authenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
     SecurityContextHolder.getContext().setAuthentication(auth);
 
-    return ResponseEntity.ok( new JwtResponse(jwtUtils.generateJwtToken(auth), auth.getName(), auth.getAuthorities().toString()));
+    return ResponseEntity
+        .ok(new JwtResponse(jwtUtils.generateJwtToken(auth), auth.getName(), auth.getAuthorities().toString()));
   }
 
   @PostMapping("/signup")
   public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
-    if (customerRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity
-          .badRequest()
-          .body(new MessageResponse("Email is already in use!"));
+    if (Boolean.TRUE.equals(customerRepository.existsByEmail(signUpRequest.getEmail()))) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
     }
 
     Customer user = new Customer();
@@ -61,7 +65,7 @@ public class AuthController {
     user.setRole(signUpRequest.getRole());
     user.setEmail(signUpRequest.getEmail());
     user.setPassword(encoder.encode(signUpRequest.getPassword()));
-    
+
     customerRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

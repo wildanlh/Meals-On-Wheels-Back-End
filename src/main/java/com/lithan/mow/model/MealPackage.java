@@ -47,6 +47,7 @@ public class MealPackage {
       this.packageImage = meal.getPackageImage();
    }
 
-   public MealPackage() {}
-   
+   public MealPackage() {
+   }
+
 }

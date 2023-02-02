@@ -27,11 +27,14 @@ import com.lithan.mow.service.CustomerService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CaregiverController {
 
-    @Autowired OrderRepository orderRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
-    @Autowired CustomerService customerService; 
+    @Autowired
+    CustomerService customerService;
 
-    @Autowired CustomerRepository customerRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
     @GetMapping("/order")
     public List<OrderResponse> getOrder() {
@@ -39,7 +42,7 @@ public class CaregiverController {
         orderRepository.findByStatus(EStatus.PENDING).forEach(order -> orderList.add(new OrderResponse(order)));
         return orderList;
     }
-    
+
     @PostMapping("/order/{id}/prepare")
     public MessageResponse prepareOrder(@PathVariable Long id) {
         Order order = orderRepository.findById(id).get();
@@ -58,15 +61,15 @@ public class CaregiverController {
     @PostMapping("order/{id}/complate")
     public MessageResponse prepareOrderComplate(@PathVariable Long id) {
         Order order = orderRepository.findById(id).get();
-        Customer caregiver =  customerService.getCurrentUser();
+        Customer caregiver = customerService.getCurrentUser();
 
         caregiver.setStatus(EStatus.AVAILABLE);
         order.setStatus(EStatus.READY_TO_DELIVER);
 
         orderRepository.save(order);
         customerRepository.save(caregiver);
-        
-        return new MessageResponse("preparing order_id: "+ id +" compalte");
+
+        return new MessageResponse("preparing order_id: " + id + " compalte");
     }
 
 }
