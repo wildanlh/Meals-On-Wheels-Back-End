@@ -4,6 +4,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,20 +15,28 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lithan.mow.model.Customer;
+import com.lithan.mow.model.constraint.EGender;
+import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.payload.request.LoginRequest;
 import com.lithan.mow.payload.request.SignupRequest;
 import com.lithan.mow.payload.response.JwtResponse;
 import com.lithan.mow.payload.response.MessageResponse;
 import com.lithan.mow.repository.CustomerRepository;
 import com.lithan.mow.security.jwt.JwtUtils;
+import com.lithan.mow.service.FileStorageService;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
+
+  private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
   @Autowired
   AuthenticationManager authenticationManager;
@@ -40,6 +50,9 @@ public class AuthController {
   @Autowired
   JwtUtils jwtUtils;
 
+  @Autowired
+  private FileStorageService fileStorageService;
+
   @PostMapping("/signin")
   public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -52,20 +65,34 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<MessageResponse> registerUser( 
+    @RequestParam("name") String name,
+    @RequestParam("address") String address,
+    @RequestParam("gender") String gender,
+    @RequestParam("role") String role,
+    @RequestParam("email") String email,
+    @RequestParam("password") String password,
+    @RequestParam("file") MultipartFile file) 
+    {
 
-    if (Boolean.TRUE.equals(customerRepository.existsByEmail(signUpRequest.getEmail()))) {
+    if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
       return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
     }
 
-    Customer user = new Customer();
-    user.setName(signUpRequest.getName());
-    user.setAddress(signUpRequest.getAddress());
-    user.setGender(signUpRequest.getGender());
-    user.setRole(signUpRequest.getRole());
-    user.setEmail(signUpRequest.getEmail());
-    user.setPassword(encoder.encode(signUpRequest.getPassword()));
+    String fileName = fileStorageService.storeFile(file);
+    String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
+    .path(fileName).toUriString();
 
+    Customer user = new Customer();
+    user.setName(name);
+    user.setAddress(address);
+    user.setGender(EGender.valueOf(gender));
+    user.setRole(ERole.valueOf(role));
+    user.setEmail(email);
+    user.setPassword(encoder.encode(password));
+    user.setFileUrl(fileDownloadUri);
+
+    System.out.println(user);
     customerRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

@@ -42,6 +42,8 @@ public class Customer {
    @Enumerated(EnumType.STRING)
    private EStatus status;
 
+   private String fileUrl;
+
    @Column(name = "image_url")
    private String imageUrl;
 
