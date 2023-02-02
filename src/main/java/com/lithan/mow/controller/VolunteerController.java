@@ -1,4 +1,4 @@
 package com.lithan.mow.controller;
 
-public class TestController {
+public class VolunteerController {
 }
