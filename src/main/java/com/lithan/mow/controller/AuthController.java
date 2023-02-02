@@ -96,5 +96,9 @@ public class AuthController {
     customerRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+
   }
+
+// todo: make "/partnership" regis
+
 }
