@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.lithan.mow.model.Customer;
-import com.lithan.mow.model.Role;
+import com.lithan.mow.model.constraint.ERole;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
@@ -15,5 +15,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
    Boolean existsByEmail(String email);
 
    // percobaan
-   List<Customer> findByRoles(Role roles);
+   List<Customer> findByRole(ERole roles);
 }

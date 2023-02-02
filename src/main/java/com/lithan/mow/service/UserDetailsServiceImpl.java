@@ -1,6 +1,10 @@
-package com.lithan.mow.security.service;
+package com.lithan.mow.service;
+
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,17 +15,16 @@ import com.lithan.mow.model.Customer;
 import com.lithan.mow.repository.CustomerRepository;
 
 @Service
+@Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
-  @Autowired
-  private CustomerRepository customerRepository;
+  
+  @Autowired CustomerRepository customerRepository;
 
   @Override
-  @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Customer user = customerRepository.findByEmail(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+    Customer user = customerRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username + " Not Found"));
 
-    return UserDetailsImpl.build(user);
+     return new User(user.getEmail(), user.getPassword(), Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString())));
   }
 
 }
