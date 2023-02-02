@@ -29,33 +29,36 @@ import com.lithan.mow.service.CustomerService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class MemberController {
 
-   @Autowired MealPackageRepository mealPackageRepository;
+   @Autowired
+   MealPackageRepository mealPackageRepository;
 
-   @Autowired OrderRepository orderRepository;
+   @Autowired
+   OrderRepository orderRepository;
 
-   @Autowired CustomerRepository customerRepository;
+   @Autowired
+   CustomerRepository customerRepository;
 
-   @Autowired CustomerService customersService;
-
+   @Autowired
+   CustomerService customersService;
 
    @GetMapping("/order")
    public List<OrderResponse> getOrder() {
-      List<OrderResponse> orderList = new ArrayList<>();      
-      orderRepository.findByOrderdBy(customersService.getCurrentUser()).forEach(order -> orderList.add(new OrderResponse(order)));
+      List<OrderResponse> orderList = new ArrayList<>();
+      orderRepository.findByOrderdBy(customersService.getCurrentUser())
+            .forEach(order -> orderList.add(new OrderResponse(order)));
       return orderList;
    }
 
    @PostMapping("/order/{id}")
-   public MessageResponse postOrder(@PathVariable Long id) {
-   MealPackage meal = mealPackageRepository.findById(id).get();
-   
+   public MessageResponse orderMeal(@PathVariable Long id) {
+      MealPackage meal = mealPackageRepository.findById(id).get();
 
       Order orderRequest = new Order();
       orderRequest.setMealPackage(meal);
       orderRequest.setOrderdOn(new Date());
       orderRequest.setStatus(EStatus.PENDING);
       orderRequest.setOrderdBy(customersService.getCurrentUser());
-      
+
       orderRepository.save(orderRequest);
 
       return new MessageResponse("You Have Successfully Requested an Order");
@@ -70,6 +73,5 @@ public class MemberController {
 
       return new MessageResponse("Happy Eating, Hope You are Enjoying Our Meal");
    }
-   
 
 }
