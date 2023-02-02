@@ -28,6 +28,7 @@ import com.lithan.mow.payload.request.SignupRequest;
 import com.lithan.mow.payload.response.JwtResponse;
 import com.lithan.mow.payload.response.MessageResponse;
 import com.lithan.mow.repository.CustomerRepository;
+import com.lithan.mow.repository.PartnerRepository;
 import com.lithan.mow.security.jwt.JwtUtils;
 import com.lithan.mow.service.FileStorageService;
 
@@ -43,6 +44,9 @@ public class AuthController {
 
   @Autowired
   CustomerRepository customerRepository;
+
+  @Autowired
+  PartnerRepository partnerRepository;
 
   @Autowired
   PasswordEncoder encoder;
@@ -76,6 +80,9 @@ public class AuthController {
     {
 
     if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+    }
+    if (partnerRepository.findByEmail(email).isPresent()) {
       return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
     }
 

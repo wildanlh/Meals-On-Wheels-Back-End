@@ -27,16 +27,29 @@ import com.lithan.mow.service.CustomerService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class RiderController {
 
-    @Autowired CustomerRepository customerRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
-    @Autowired CustomerService customerService;
+    @Autowired
+    CustomerService customerService;
 
-    @Autowired OrderRepository orderRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     @GetMapping("/order")
     public List<OrderResponse> getOrder() {
         List<OrderResponse> orderList = new ArrayList<>();
-        orderRepository.findByStatus(EStatus.READY_TO_DELIVER).forEach(order -> orderList.add(new OrderResponse(order)));
+        orderRepository.findByStatusAndDeliveredBy(EStatus.READY_TO_DELIVER, customerService.getCurrentUser())
+                .forEach(order -> orderList.add(new OrderResponse(order)));
+
+        return orderList;
+    }
+
+    @GetMapping("/order/all")
+    public List<OrderResponse> getAllOrder() {
+        List<OrderResponse> orderList = new ArrayList<>();
+        orderRepository.findByDeliveredBy(customerService.getCurrentUser())
+                .forEach(order -> orderList.add(new OrderResponse(order)));
 
         return orderList;
     }
@@ -53,7 +66,7 @@ public class RiderController {
         orderRepository.save(order);
         customerRepository.save(raider);
 
-        return new MessageResponse("deliver order_id: "+id);
+        return new MessageResponse("deliver order_id: " + id);
     }
 
     @PostMapping("/order/{id}/complete")
@@ -67,7 +80,7 @@ public class RiderController {
         orderRepository.save(order);
         customerRepository.save(raider);
 
-        return new MessageResponse("deliver order_id: "+id);
+        return new MessageResponse("deliver order_id: " + id);
     }
 
 }
