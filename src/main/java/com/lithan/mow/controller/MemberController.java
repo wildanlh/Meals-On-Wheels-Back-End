@@ -58,17 +58,17 @@ public class MemberController {
       
       orderRepository.save(orderRequest);
 
-      return new MessageResponse("your order have send");
+      return new MessageResponse("You Have Successfully Requested an Order");
    }
 
-   @PostMapping("/order/{id}/complate")
+   @PostMapping("/order/{id}/complete")
    public MessageResponse complateOrder(@PathVariable Long id) {
       Order order = orderRepository.findById(id).get();
-      order.setStatus(EStatus.COMPLATE);
+      order.setStatus(EStatus.COMPLETE);
 
       orderRepository.save(order);
 
-      return new MessageResponse("happy eating");
+      return new MessageResponse("Happy Eating, Hope You are Enjoying Our Meal");
    }
    
 

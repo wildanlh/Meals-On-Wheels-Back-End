@@ -21,55 +21,53 @@ import com.lithan.mow.repository.CustomerRepository;
 import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.service.CustomerService;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CAREGIVER','ROLE_VOLUNTTEER')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_RAIDER','ROLE_VOLUNTEER')")
 @RestController
-@RequestMapping("/api/caregiver")
+@RequestMapping("/api/rider")
 @CrossOrigin(origins = "*", maxAge = 3600)
-public class CaregiverController {
+public class RiderController {
 
-    @Autowired
-    OrderRepository orderRepository;
+    @Autowired CustomerRepository customerRepository;
 
-    @Autowired
-    CustomerService customerService;
+    @Autowired CustomerService customerService;
 
-    @Autowired
-    CustomerRepository customerRepository;
+    @Autowired OrderRepository orderRepository;
 
     @GetMapping("/order")
     public List<OrderResponse> getOrder() {
         List<OrderResponse> orderList = new ArrayList<>();
-        orderRepository.findByStatus(EStatus.PENDING).forEach(order -> orderList.add(new OrderResponse(order)));
+        orderRepository.findByStatus(EStatus.READY_TO_DELIVER).forEach(order -> orderList.add(new OrderResponse(order)));
+
         return orderList;
     }
 
-    @PostMapping("/order/{id}/prepare")
-    public MessageResponse prepareOrder(@PathVariable Long id) {
+    @PostMapping("/order/{id}/deliver")
+    public MessageResponse deliverOrder(@PathVariable Long id) {
         Order order = orderRepository.findById(id).get();
-        Customer caregiver = customerService.getCurrentUser();
+        Customer raider = customerService.getCurrentUser();
 
-        caregiver.setStatus(EStatus.BUSY);
-        order.setStatus(EStatus.PREPARING);
-        order.setPreparedBy(caregiver);
+        order.setStatus(EStatus.ON_THE_WAY);
+        raider.setStatus(EStatus.BUSY);
+        order.setDeliveredBy(raider);
 
         orderRepository.save(order);
-        customerRepository.save(caregiver);
+        customerRepository.save(raider);
 
-        return new MessageResponse("preparing order_id: " + id);
+        return new MessageResponse("deliver order_id: "+id);
     }
 
-    @PostMapping("order/{id}/complete")
-    public MessageResponse prepareOrderComplate(@PathVariable Long id) {
+    @PostMapping("/order/{id}/complete")
+    public MessageResponse deliverOrderComplate(@PathVariable Long id) {
         Order order = orderRepository.findById(id).get();
-        Customer caregiver = customerService.getCurrentUser();
+        Customer raider = customerService.getCurrentUser();
 
-        caregiver.setStatus(EStatus.AVAILABLE);
-        order.setStatus(EStatus.READY_TO_DELIVER);
+        order.setStatus(EStatus.DELIVERY_COMPLETE);
+        raider.setStatus(EStatus.AVAILABLE);
 
         orderRepository.save(order);
-        customerRepository.save(caregiver);
+        customerRepository.save(raider);
 
-        return new MessageResponse("preparing order_id: " + id + " compalte");
+        return new MessageResponse("deliver order_id: "+id);
     }
 
 }

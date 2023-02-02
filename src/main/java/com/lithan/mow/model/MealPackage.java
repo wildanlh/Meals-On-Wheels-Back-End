@@ -23,7 +23,7 @@ public class MealPackage {
    private String packageName;
 
    @Column(name = "main_course")
-   private String mainCaurse;
+   private String mainCourse;
 
    private String salad;
 
@@ -39,7 +39,7 @@ public class MealPackage {
    public MealPackage(MealPackageRequest meal) {
       this.id = meal.getId();
       this.packageName = meal.getPackageName();
-      this.mainCaurse = meal.getMainCaurse();
+      this.mainCourse = meal.getMainCourse();
       this.salad = meal.getSalad();
       this.soup = meal.getSoup();
       this.dessert = meal.getSoup();

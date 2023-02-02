@@ -11,7 +11,10 @@ public class MealPackageRequest {
 
     private String packageName;
 
-    private String mainCaurse;
+ 
+    private String mainCourse;
+ 
+
 
     private String salad;
 
@@ -26,7 +29,7 @@ public class MealPackageRequest {
     public MealPackageRequest(MealPackage meal) {
         this.id = meal.getId();
         this.packageName = meal.getPackageName();
-        this.mainCaurse = meal.getMainCaurse();
+        this.mainCourse = meal.getMainCourse();
         this.salad = meal.getSalad();
         this.soup = meal.getSoup();
         this.dessert = meal.getSoup();

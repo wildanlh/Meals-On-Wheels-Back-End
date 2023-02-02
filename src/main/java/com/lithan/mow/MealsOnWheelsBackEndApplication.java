@@ -58,7 +58,7 @@ public class MealsOnWheelsBackEndApplication {
 			raider.setName("stefansim");
 			raider.setAddress("bali, indonesia");
 			raider.setGender(EGender.MALE);
-			raider.setRole(ERole.ROLE_RAIDER);
+			raider.setRole(ERole.ROLE_RIDER);
 			raider.setEmail("stefansim@gmail.com");
 			raider.setPassword(passwordEncoder.encode("qwerty"));
 			
@@ -77,7 +77,7 @@ public class MealsOnWheelsBackEndApplication {
 			MealPackage packageA = new MealPackage();
 			packageA.setDessert("puding");
 			packageA.setDrink("cocacola");
-			packageA.setMainCaurse("fried chiken");
+			packageA.setMainCourse("fried chiken");
 			packageA.setPackageName("Package A");
 			packageA.setSalad("kol");
 			packageA.setSoup("sayur bening");
@@ -90,7 +90,7 @@ public class MealsOnWheelsBackEndApplication {
 			order.setOrderdBy(member);
 			order.setOrderdOn(new Date());
 			order.setPreparedBy(caregiver);
-			order.setStatus(EStatus.COMPLATE);
+			order.setStatus(EStatus.COMPLETE);
 
 			orderRepository.save(order);
 
