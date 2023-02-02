@@ -17,7 +17,9 @@ import com.lithan.mow.repository.CustomerRepository;
 import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.service.OrderService;
-
+/*
+ * you can change the endpoin if you want, ijust named it based on what is on my head ;) 
+ */
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -48,16 +50,20 @@ public class AdminController {
     return orderService.getOrderWithStatus(EStatus.PENDING);
   }
 
+  // todo: asign partner to pending order 
+
   @GetMapping("/order/prepared")
   public List<OrderResponse> getPreparedOrder() {
     return orderService.getOrderWithStatus(EStatus.PREPARING);
   }
 
+  //todo: assign rider to ready-to-deliver order
+  
   @GetMapping("/order/ready-to-deliver")
   public List<OrderResponse> getRedyToDeliverOrder() {
     return orderService.getOrderWithStatus(EStatus.READY_TO_DELIVER);
   }
-
+  
   @GetMapping("/order/on-delivery")
   public List<OrderResponse> getOnDeliveryOrder() {
     return orderService.getOrderWithStatus(EStatus.ON_DELIVERY);
