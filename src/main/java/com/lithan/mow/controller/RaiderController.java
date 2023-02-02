@@ -27,16 +27,20 @@ import com.lithan.mow.service.CustomerService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class RaiderController {
 
-    @Autowired CustomerRepository customerRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
-    @Autowired CustomerService customerService;
+    @Autowired
+    CustomerService customerService;
 
-    @Autowired OrderRepository orderRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     @GetMapping("/order")
     public List<OrderResponse> getOrder() {
         List<OrderResponse> orderList = new ArrayList<>();
-        orderRepository.findByStatus(EStatus.READY_TO_DELIVER).forEach(order -> orderList.add(new OrderResponse(order)));
+        orderRepository.findByStatus(EStatus.READY_TO_DELIVER)
+                .forEach(order -> orderList.add(new OrderResponse(order)));
 
         return orderList;
     }
@@ -53,7 +57,7 @@ public class RaiderController {
         orderRepository.save(order);
         customerRepository.save(raider);
 
-        return new MessageResponse("deliver order_id: "+id);
+        return new MessageResponse("deliver order_id: " + id);
     }
 
     @PostMapping("/order/{id}/complate")
@@ -61,13 +65,13 @@ public class RaiderController {
         Order order = orderRepository.findById(id).get();
         Customer raider = customerService.getCurrentUser();
 
-        order.setStatus(EStatus.DELIVERY_COMPLATE);
+        order.setStatus(EStatus.DELIVERY_COMPLETE);
         raider.setStatus(EStatus.AVAILABLE);
 
         orderRepository.save(order);
         customerRepository.save(raider);
 
-        return new MessageResponse("deliver order_id: "+id);
+        return new MessageResponse("deliver order_id: " + id);
     }
 
 }
