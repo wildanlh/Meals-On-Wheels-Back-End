@@ -13,20 +13,19 @@ import lombok.Data;
 public class OrderResponse {
    private Long id;
    private CustomerResponse orderBy;
-   private CustomerResponse preparedBy;
+   private PartnerResponse preparedBy;
    private CustomerResponse deliveredBy;
    private MealPackage mealPackage;
    private Date orderOn;
    private EStatus orderStatus;
 
-   
    public OrderResponse(Order order) {
       if (Optional.ofNullable(order.getPreparedBy()).isPresent()) {
-         this.preparedBy = new CustomerResponse(order.getPreparedBy());
+         this.preparedBy = new PartnerResponse(order.getPreparedBy());
       }
       if (Optional.ofNullable(order.getDeliveredBy()).isPresent()) {
-         
-         this.deliveredBy =new CustomerResponse(order.getDeliveredBy());
+
+         this.deliveredBy = new CustomerResponse(order.getDeliveredBy());
       }
       this.id = order.getId();
       this.orderBy = new CustomerResponse(order.getOrderdBy());
