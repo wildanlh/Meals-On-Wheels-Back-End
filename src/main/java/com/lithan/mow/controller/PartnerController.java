@@ -21,7 +21,7 @@ import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.repository.PartnerRepository;
 import com.lithan.mow.service.CustomerService;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CAREGIVER','ROLE_VOLUNTTEER')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PARTNER','ROLE_VOLUNTTEER')")
 @RestController
 @RequestMapping("/api/partner")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -39,7 +39,16 @@ public class PartnerController {
     @GetMapping("/order")
     public List<OrderResponse> getOrder() {
         List<OrderResponse> orderList = new ArrayList<>();
-        orderRepository.findByStatus(EStatus.PENDING).forEach(order -> orderList.add(new OrderResponse(order)));
+        orderRepository.findByStatusAndPreparedBy(EStatus.PENDING, customerService.getCurrentPartner())
+                .forEach(order -> orderList.add(new OrderResponse(order)));
+        return orderList;
+    }
+
+    @GetMapping("/order/all")
+    public List<OrderResponse> getAllOrder() {
+        List<OrderResponse> orderList = new ArrayList<>();
+        orderRepository.findByPreparedBy(customerService.getCurrentPartner())
+                .forEach(order -> orderList.add(new OrderResponse(order)));
         return orderList;
     }
 

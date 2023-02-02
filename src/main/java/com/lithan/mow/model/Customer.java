@@ -47,4 +47,6 @@ public class Customer {
    @Column(name = "image_url")
    private String imageUrl;
 
+   private boolean active;
+
 }

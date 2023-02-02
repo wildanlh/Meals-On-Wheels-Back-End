@@ -36,4 +36,6 @@ public class Partner {
     @Column(name = "image_url")
     private String imageUrl;
 
+    private boolean active;
+
 }
