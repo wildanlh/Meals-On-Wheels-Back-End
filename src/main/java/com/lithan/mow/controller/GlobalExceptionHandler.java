@@ -20,4 +20,5 @@ public class GlobalExceptionHandler {
     return new MessageResponse(ex.getMessage());
   }
 
+  //todo: add other exception
 }
