@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import lombok.Data;
 
 @Data
-@Component
 @ConfigurationProperties(prefix = "file")
 @Component
 public class FileStorageProperties {

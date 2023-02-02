@@ -9,7 +9,7 @@ public class MealPackageRequest {
  
     private String packageName;
  
-    private String mainCaurse;
+    private String mainCourse;
  
     private String salad;
  
