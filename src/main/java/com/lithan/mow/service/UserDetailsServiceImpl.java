@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lithan.mow.exception.UserNotActiveException;
 import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.Partner;
 import com.lithan.mow.model.constraint.ERole;
@@ -30,15 +31,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     if (partnerRepository.findByEmail(username).isPresent()) {
-
       Partner data = partnerRepository.findByEmail(username).get();
+      if (!data.isActive()) throw new UserNotActiveException("your account is not active, please contact site admin");
       return new User(data.getEmail(), data.getPassword(),
-          Arrays.asList(new SimpleGrantedAuthority(ERole.ROLE_PARTNER.toString())));
+      Arrays.asList(new SimpleGrantedAuthority(ERole.ROLE_PARTNER.toString())));
     }
-
+    
     Customer user = customerRepository.findByEmail(username)
-        .orElseThrow(() -> new UsernameNotFoundException(username + " Not Found"));
-
+    .orElseThrow(() -> new UsernameNotFoundException(username + " Not Found"));
+    
+    if (!user.isActive() && !user.getRole().equals(ERole.ROLE_MEMBER)) throw new UserNotActiveException("your account is not active, please contact site admin");
     return new User(user.getEmail(), user.getPassword(),
         Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString())));
   }

@@ -41,6 +41,14 @@ public class MemberController {
    @Autowired
    CustomerService customersService;
 
+   @GetMapping("/order")
+   public List<OrderResponse> getUncomplateOrder() {
+      List<OrderResponse> orderList = new ArrayList<>();
+      orderRepository.findByStatusIsNotAndOrderdBy(EStatus.ORDER_COMPLETE, customersService.getCurrentUser())
+            .forEach(order -> orderList.add(new OrderResponse(order)));
+      return orderList;
+   }
+
    @GetMapping("/order/all")
    public List<OrderResponse> getAllOrder() {
       List<OrderResponse> orderList = new ArrayList<>();
@@ -49,18 +57,7 @@ public class MemberController {
       return orderList;
    }
 
-   @GetMapping("/order")
-   public List<OrderResponse> getOrder() {
-      List<OrderResponse> orderList = new ArrayList<>();
-      orderRepository.findByOrderdBy(customersService.getCurrentUser()).forEach(order -> {
-         if (!order.getStatus().equals(EStatus.ORDER_COMPLETE)) {
-            orderList.add(new OrderResponse(order));
-         }
-      });
-      return orderList;
-   }
-
-   @PostMapping("/order/{id}")
+   @PostMapping("/order/{id}/create")
    public MessageResponse orderMeal(@PathVariable Long id) {
       MealPackage meal = mealPackageRepository.findById(id).get();
 
