@@ -24,7 +24,6 @@ import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.constraint.EGender;
 import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.payload.request.LoginRequest;
-import com.lithan.mow.payload.request.SignupRequest;
 import com.lithan.mow.payload.response.JwtResponse;
 import com.lithan.mow.payload.response.MessageResponse;
 import com.lithan.mow.repository.CustomerRepository;
@@ -36,8 +35,6 @@ import com.lithan.mow.service.FileStorageService;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
-
-  private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
   @Autowired
   AuthenticationManager authenticationManager;
