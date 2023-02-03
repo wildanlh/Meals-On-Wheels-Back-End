@@ -41,7 +41,7 @@ public class MainController {
     @Autowired
     MealPackageRepository mealPackageRepository;
 
-    @GetMapping("/profile/me")
+    @GetMapping("/user/me")
     public CustomerResponse getProfile() {
         return new CustomerResponse(customerService.getCurrentUser());
     }
@@ -86,5 +86,4 @@ public class MainController {
         return new MealPackageRequest(mealPackageRepository.findById(id).get());
     }
 
-    // todo: add post donate contreoller
 }

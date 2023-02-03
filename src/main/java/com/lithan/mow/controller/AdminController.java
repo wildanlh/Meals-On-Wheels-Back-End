@@ -12,13 +12,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.Order;
+import com.lithan.mow.model.Partner;
 import com.lithan.mow.model.constraint.EStatus;
+import com.lithan.mow.payload.request.FeedbackRequest;
 import com.lithan.mow.payload.request.MealPackageRequest;
 import com.lithan.mow.payload.response.CustomerResponse;
 import com.lithan.mow.payload.response.MessageResponse;
 import com.lithan.mow.payload.response.OrderResponse;
+import com.lithan.mow.payload.response.PartnerResponse;
 import com.lithan.mow.repository.CustomerRepository;
+import com.lithan.mow.repository.FeedbackRepository;
 import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.repository.PartnerRepository;
@@ -44,6 +49,9 @@ public class AdminController {
 
   @Autowired
   PartnerRepository partnerRepository;
+
+  @Autowired
+  FeedbackRepository feedbackRepository;
 
   @GetMapping("/order/all")
   public List<OrderResponse> getOrder() {
@@ -111,6 +119,14 @@ public class AdminController {
     return customerList;
   }
 
+  @GetMapping("/partner")
+  public List<PartnerResponse> getPartner() {
+    List<PartnerResponse> partnerList = new ArrayList<>();
+    partnerRepository.findAll().forEach(data -> partnerList.add(new PartnerResponse(data)));
+
+    return partnerList;
+  }
+
   @GetMapping("/menu/all")
   public List<MealPackageRequest> getMeal() {
     List<MealPackageRequest> mealList = new ArrayList<>();
@@ -119,14 +135,46 @@ public class AdminController {
     return mealList;
   }
 
-  // todo: get un active user
+  @GetMapping("/user/inactive")
+  public List<CustomerResponse> getInactiveUser() {
+    List<CustomerResponse> customerList = new ArrayList<>();
+    customerRepository.findByActive(false).forEach(data -> customerList.add(new CustomerResponse(data)));
 
-  // todo: post activeted user
+    return customerList;
+  }
 
-  //todo: get feedback
+  @PostMapping("/user/{id}/activate")
+  public MessageResponse activateUser(@PathVariable Long id) {
+    Customer user = customerRepository.findById(id).get();
+    user.setActive(true);
+    customerRepository.save(user);
 
-  //todo: get donate
+    return new MessageResponse(String.format("activate user with id: %d", id));
+  }
 
-  //todo: get partner 
+  @GetMapping("/partner/inactive")
+  public List<PartnerResponse> getInactivePartner() {
+    List<PartnerResponse> customerList = new ArrayList<>();
+    partnerRepository.findByActive(false).forEach(data -> customerList.add(new PartnerResponse(data)));
+
+    return customerList;
+  }
+
+  @PostMapping("/partner/{id}/activate")
+  public MessageResponse activatePartner(@PathVariable Long id) {
+    Partner partner = partnerRepository.findById(id).get();
+    partner.setActive(true);
+    partnerRepository.save(partner);
+
+    return new MessageResponse(String.format("activate user with id: %d", id));
+  }
+
+  @GetMapping("/feedback")
+  public List<FeedbackRequest> getFeedback() {
+    List<FeedbackRequest> feedbackList = new ArrayList<>();
+    feedbackRepository.findAll().forEach(data -> feedbackList.add(new FeedbackRequest(data)));
+
+    return feedbackList;
+  }
 
 }
