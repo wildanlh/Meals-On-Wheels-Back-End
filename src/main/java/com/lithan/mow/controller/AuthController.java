@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.constraint.EGender;
 import com.lithan.mow.model.constraint.ERole;
+import com.lithan.mow.model.constraint.EStatus;
 import com.lithan.mow.payload.request.LoginRequest;
 import com.lithan.mow.payload.request.SignupRequest;
 import com.lithan.mow.payload.response.JwtResponse;
@@ -98,6 +99,7 @@ public class AuthController {
     user.setEmail(email);
     user.setPassword(encoder.encode(password));
     user.setFileUrl(fileDownloadUri);
+    user.setStatus(EStatus.AVAILABLE);
 
     System.out.println(user);
     customerRepository.save(user);

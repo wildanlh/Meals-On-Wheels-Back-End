@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,10 +24,7 @@ import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.repository.PartnerRepository;
 import com.lithan.mow.service.OrderService;
 
-/*
- * you can change the endpoin if you want, ijust named it based on what is on my
- * head ;)
- */
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CAREGIVER')")
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -75,6 +73,11 @@ public class AdminController {
     return orderService.getOrderWithStatus(EStatus.PREPARING);
   }
 
+  @GetMapping("/order/ready-to-deliver")
+  public List<OrderResponse> getRedyToDeliverOrder() {
+    return orderService.getOrderWithStatus(EStatus.READY_TO_DELIVER);
+  }
+
   @PostMapping("/order/{orderId}/deliver/{riderId}")
   public MessageResponse assignRider(@PathVariable("orderId") Long orderId, @PathVariable("riderId") Long riderId) {
     Order order = orderRepository.findById(orderId).get();
@@ -82,11 +85,6 @@ public class AdminController {
 
     orderRepository.save(order);
     return new MessageResponse(String.format("order %d assign to rider %d", orderId, riderId));
-  }
-
-  @GetMapping("/order/ready-to-deliver")
-  public List<OrderResponse> getRedyToDeliverOrder() {
-    return orderService.getOrderWithStatus(EStatus.READY_TO_DELIVER);
   }
 
   @GetMapping("/order/on-delivery")
@@ -105,14 +103,6 @@ public class AdminController {
 
   }
 
-  @GetMapping("/meal")
-  public List<MealPackageRequest> getMeal() {
-    List<MealPackageRequest> mealList = new ArrayList<>();
-    mealPackRepository.findAll().forEach(data -> mealList.add(new MealPackageRequest(data)));
-
-    return mealList;
-  }
-
   @GetMapping("/user")
   public List<CustomerResponse> getUser() {
     List<CustomerResponse> customerList = new ArrayList<>();
@@ -120,5 +110,23 @@ public class AdminController {
 
     return customerList;
   }
+
+  @GetMapping("/menu/all")
+  public List<MealPackageRequest> getMeal() {
+    List<MealPackageRequest> mealList = new ArrayList<>();
+    mealPackRepository.findAll().forEach(data -> mealList.add(new MealPackageRequest(data)));
+
+    return mealList;
+  }
+
+  // todo: get un active user
+
+  // todo: post activeted user
+
+  //todo: get feedback
+
+  //todo: get donate
+
+  //todo: get partner 
 
 }
