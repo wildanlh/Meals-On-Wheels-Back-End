@@ -20,5 +20,5 @@ public class GlobalExceptionHandler {
     return new MessageResponse(ex.getMessage());
   }
 
-  //todo: add other exception
+  //todo: add other exception like file not found if needed
 }
