@@ -33,6 +33,8 @@ public class MealPackage {
 
    private String drink;
 
+   private boolean frozen;
+
    @Column(name = "package_image")
    private String packageImage;
 

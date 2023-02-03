@@ -1,6 +1,5 @@
 package com.lithan.mow;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -15,12 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.MealPackage;
 import com.lithan.mow.model.Order;
+import com.lithan.mow.model.Partner;
 import com.lithan.mow.model.constraint.EGender;
 import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.model.constraint.EStatus;
 import com.lithan.mow.repository.CustomerRepository;
 import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.repository.OrderRepository;
+import com.lithan.mow.repository.PartnerRepository;
 
 @SpringBootApplication
 public class MealsOnWheelsBackEndApplication {
@@ -30,21 +31,24 @@ public class MealsOnWheelsBackEndApplication {
 	}
 
 	@Bean
-	CommandLineRunner initRunner( CustomerRepository customerRepository, PasswordEncoder passwordEncoder, OrderRepository orderRepository, MealPackageRepository mealPackageRepository ) {
+	CommandLineRunner initRunner(CustomerRepository customerRepository, PasswordEncoder passwordEncoder,
+			OrderRepository orderRepository, MealPackageRepository mealPackageRepository,
+			PartnerRepository partnerRepository) {
 		return args -> {
 			System.out.println("start the app inti the mock data");
 
-			if(customerRepository.count() > 1) return;
+			if (customerRepository.count() > 1)
+				return;
 
 			List<Customer> customerList = new ArrayList<>();
 
-			Customer caregiver = new Customer();
-			caregiver.setName("wildan");
-			caregiver.setAddress("java, indonesia");
-			caregiver.setGender(EGender.MALE);
-			caregiver.setRole(ERole.ROLE_CAREGIVER);
-			caregiver.setEmail("wildan@gmail.com");
-			caregiver.setPassword(passwordEncoder.encode("qwerty"));
+			Partner partner = new Partner();
+			partner.setName("wildan");
+			partner.setAddress("java, indonesia");
+			partner.setEmail("wildan@gmail.com");
+			partner.setPassword(passwordEncoder.encode("qwerty"));
+
+			partnerRepository.save(partner);
 
 			Customer member = new Customer();
 			member.setName("bagus");
@@ -61,7 +65,7 @@ public class MealsOnWheelsBackEndApplication {
 			raider.setRole(ERole.ROLE_RIDER);
 			raider.setEmail("stefansim@gmail.com");
 			raider.setPassword(passwordEncoder.encode("qwerty"));
-			
+
 			Customer volunteer = new Customer();
 			volunteer.setName("norman");
 			volunteer.setAddress("kualalumpur, malaysia");
@@ -70,7 +74,15 @@ public class MealsOnWheelsBackEndApplication {
 			volunteer.setEmail("norman@gmail.com");
 			volunteer.setPassword(passwordEncoder.encode("qwerty"));
 
-			customerList.addAll(Arrays.asList(caregiver, member, raider, volunteer));
+			Customer admin = new Customer();
+			admin.setName("admin");
+			admin.setAddress("singapore");
+			admin.setGender(EGender.MALE);
+			admin.setRole(ERole.ROLE_ADMIN);
+			admin.setEmail("admin@gmail.com");
+			admin.setPassword(passwordEncoder.encode("qwerty"));
+
+			customerList.addAll(Arrays.asList(member, raider, volunteer, admin));
 
 			customerRepository.saveAll(customerList);
 
@@ -78,22 +90,74 @@ public class MealsOnWheelsBackEndApplication {
 			packageA.setDessert("puding");
 			packageA.setDrink("cocacola");
 			packageA.setMainCourse("fried chiken");
-			packageA.setPackageName("Package A");
+			packageA.setPackageName("Package Ayam");
 			packageA.setSalad("kol");
 			packageA.setSoup("sayur bening");
 
-			mealPackageRepository.save(packageA);
+			MealPackage packageB = new MealPackage();
+			packageB.setDessert("puding");
+			packageB.setDrink("cocacola");
+			packageB.setMainCourse("fried chiken");
+			packageB.setPackageName("Package Babi");
+			packageB.setSalad("kol");
+			packageB.setSoup("sayur bening");
+
+			MealPackage packageC = new MealPackage();
+			packageC.setDessert("puding");
+			packageC.setDrink("cocacola");
+			packageC.setMainCourse("fried chiken");
+			packageC.setPackageName("Package Cetik");
+			packageC.setSalad("kol");
+			packageC.setSoup("sayur bening");
+
+			mealPackageRepository.saveAll(Arrays.asList(packageA, packageB, packageC));
+
+			Order pending = new Order();
+			pending.setMealPackage(packageA);
+			pending.setOrderdBy(member);
+			pending.setOrderdOn(new Date());
+			pending.setPreparedBy(partner);
+			pending.setStatus(EStatus.PENDING);
+
+			Order prepare = new Order();
+			prepare.setMealPackage(packageB);
+			prepare.setOrderdBy(member);
+			prepare.setOrderdOn(new Date());
+			prepare.setPreparedBy(partner);
+			prepare.setStatus(EStatus.PREPARING);
+
+			Order readyToDeliver = new Order();
+			readyToDeliver.setMealPackage(packageC);
+			readyToDeliver.setOrderdBy(member);
+			readyToDeliver.setOrderdOn(new Date());
+			readyToDeliver.setPreparedBy(partner);
+			readyToDeliver.setStatus(EStatus.READY_TO_DELIVER);
+
+			Order onDeliver = new Order();
+			onDeliver.setDeliveredBy(raider);
+			onDeliver.setMealPackage(packageA);
+			onDeliver.setOrderdBy(member);
+			onDeliver.setOrderdOn(new Date());
+			onDeliver.setPreparedBy(partner);
+			onDeliver.setStatus(EStatus.ON_DELIVERY);
+
+			Order deliverComplate = new Order();
+			deliverComplate.setDeliveredBy(raider);
+			deliverComplate.setMealPackage(packageB);
+			deliverComplate.setOrderdBy(member);
+			deliverComplate.setOrderdOn(new Date());
+			deliverComplate.setPreparedBy(partner);
+			deliverComplate.setStatus(EStatus.DELIVERY_COMPLETE);
 
 			Order order = new Order();
 			order.setDeliveredBy(raider);
-			order.setMealPackage(packageA);
+			order.setMealPackage(packageC);
 			order.setOrderdBy(member);
 			order.setOrderdOn(new Date());
-			order.setPreparedBy(caregiver);
-			order.setStatus(EStatus.COMPLETE);
+			order.setPreparedBy(partner);
+			order.setStatus(EStatus.ORDER_COMPLETE);
 
-			orderRepository.save(order);
-
+			orderRepository.saveAll(Arrays.asList(pending, prepare, readyToDeliver, onDeliver, deliverComplate, order));
 
 		};
 	}

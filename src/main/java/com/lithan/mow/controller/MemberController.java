@@ -23,39 +23,50 @@ import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.service.CustomerService;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+@PreAuthorize("hasRole('ROLE_MEMBER')")
 @RestController
 @RequestMapping("/api/member")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class MemberController {
 
-   @Autowired MealPackageRepository mealPackageRepository;
+   @Autowired
+   MealPackageRepository mealPackageRepository;
 
-   @Autowired OrderRepository orderRepository;
+   @Autowired
+   OrderRepository orderRepository;
 
-   @Autowired CustomerRepository customerRepository;
+   @Autowired
+   CustomerRepository customerRepository;
 
-   @Autowired CustomerService customersService;
-
+   @Autowired
+   CustomerService customersService;
 
    @GetMapping("/order")
-   public List<OrderResponse> getOrder() {
-      List<OrderResponse> orderList = new ArrayList<>();      
-      orderRepository.findByOrderdBy(customersService.getCurrentUser()).forEach(order -> orderList.add(new OrderResponse(order)));
+   public List<OrderResponse> getUncomplateOrder() {
+      List<OrderResponse> orderList = new ArrayList<>();
+      orderRepository.findByStatusIsNotAndOrderdBy(EStatus.ORDER_COMPLETE, customersService.getCurrentUser())
+            .forEach(order -> orderList.add(new OrderResponse(order)));
       return orderList;
    }
 
-   @PostMapping("/order/{id}")
-   public MessageResponse postOrder(@PathVariable Long id) {
-   MealPackage meal = mealPackageRepository.findById(id).get();
-   
+   @GetMapping("/order/all")
+   public List<OrderResponse> getAllOrder() {
+      List<OrderResponse> orderList = new ArrayList<>();
+      orderRepository.findByOrderdBy(customersService.getCurrentUser())
+            .forEach(order -> orderList.add(new OrderResponse(order)));
+      return orderList;
+   }
+
+   @PostMapping("/order/{id}/create")
+   public MessageResponse orderMeal(@PathVariable Long id) {
+      MealPackage meal = mealPackageRepository.findById(id).get();
 
       Order orderRequest = new Order();
       orderRequest.setMealPackage(meal);
       orderRequest.setOrderdOn(new Date());
       orderRequest.setStatus(EStatus.PENDING);
       orderRequest.setOrderdBy(customersService.getCurrentUser());
-      
+
       orderRepository.save(orderRequest);
 
       return new MessageResponse("You Have Successfully Requested an Order");
@@ -64,12 +75,11 @@ public class MemberController {
    @PostMapping("/order/{id}/complete")
    public MessageResponse complateOrder(@PathVariable Long id) {
       Order order = orderRepository.findById(id).get();
-      order.setStatus(EStatus.COMPLETE);
+      order.setStatus(EStatus.ORDER_COMPLETE);
 
       orderRepository.save(order);
 
       return new MessageResponse("Happy Eating, Hope You are Enjoying Our Meal");
    }
-   
 
 }

@@ -13,15 +13,23 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lithan.mow.model.Customer;
+import com.lithan.mow.model.Partner;
+import com.lithan.mow.model.constraint.EGender;
+import com.lithan.mow.model.constraint.ERole;
+import com.lithan.mow.model.constraint.EStatus;
 import com.lithan.mow.payload.request.LoginRequest;
-import com.lithan.mow.payload.request.SignupRequest;
 import com.lithan.mow.payload.response.JwtResponse;
 import com.lithan.mow.payload.response.MessageResponse;
 import com.lithan.mow.repository.CustomerRepository;
+import com.lithan.mow.repository.PartnerRepository;
 import com.lithan.mow.security.jwt.JwtUtils;
+import com.lithan.mow.service.FileStorageService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -35,10 +43,16 @@ public class AuthController {
   CustomerRepository customerRepository;
 
   @Autowired
+  PartnerRepository partnerRepository;
+
+  @Autowired
   PasswordEncoder encoder;
 
   @Autowired
   JwtUtils jwtUtils;
+
+  @Autowired
+  private FileStorageService fileStorageService;
 
   @PostMapping("/signin")
   public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -48,26 +62,82 @@ public class AuthController {
     SecurityContextHolder.getContext().setAuthentication(auth);
 
     return ResponseEntity
-        .ok(new JwtResponse(jwtUtils.generateJwtToken(auth), auth.getName(), auth.getAuthorities().toString()));
+        .ok(new JwtResponse(jwtUtils.generateJwtToken(auth)));
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<MessageResponse> registerUser( 
+    @RequestParam("name") String name,
+    @RequestParam("address") String address,
+    @RequestParam("gender") String gender,
+    @RequestParam("role") String role,
+    @RequestParam("email") String email,
+    @RequestParam("password") String password,
+    @RequestParam("file") MultipartFile file) 
+    {
 
-    if (Boolean.TRUE.equals(customerRepository.existsByEmail(signUpRequest.getEmail()))) {
+    if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+    }
+    if (partnerRepository.findByEmail(email).isPresent()) {
       return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
     }
 
-    Customer user = new Customer();
-    user.setName(signUpRequest.getName());
-    user.setAddress(signUpRequest.getAddress());
-    user.setGender(signUpRequest.getGender());
-    user.setRole(signUpRequest.getRole());
-    user.setEmail(signUpRequest.getEmail());
-    user.setPassword(encoder.encode(signUpRequest.getPassword()));
+    String fileName = fileStorageService.storeFile(file);
+    String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
+    .path(fileName).toUriString();
 
+    Customer user = new Customer();
+    user.setName(name);
+    user.setAddress(address);
+    user.setGender(EGender.valueOf(gender));
+    user.setRole(ERole.valueOf(role));
+    user.setEmail(email);
+    user.setPassword(encoder.encode(password));
+    user.setFileUrl(fileDownloadUri);
+    user.setStatus(EStatus.AVAILABLE);
+
+    System.out.println(user);
     customerRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+
   }
+
+// todo: make "/partnership" regis
+@PostMapping("/partnersignup")
+public ResponseEntity<MessageResponse> registerPartner( 
+  @RequestParam("name") String name,
+  @RequestParam("email") String email,
+  @RequestParam("address") String address,
+  @RequestParam("password") String password,
+  @RequestParam("file") MultipartFile file)
+  {
+
+  if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
+    return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+  }
+  if (partnerRepository.findByEmail(email).isPresent()) {
+    return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+  }
+
+  String fileName = fileStorageService.storeFile(file);
+  String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
+  .path(fileName).toUriString();
+
+  Partner partner = new Partner();
+
+  partner.setName(name);
+  partner.setAddress(address);
+  partner.setEmail(email);
+  partner.setPassword(encoder.encode(password));
+  partner.setImageUrl(fileDownloadUri);
+  partner.setActive(false);
+
+  partnerRepository.save(partner);
+
+  return ResponseEntity.ok(new MessageResponse("Partner registered successfully!"));
+
+}
+
 }
