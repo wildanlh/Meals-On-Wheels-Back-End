@@ -4,8 +4,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lithan.mow.model.Customer;
+import com.lithan.mow.model.Partner;
 import com.lithan.mow.model.constraint.EGender;
 import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.payload.request.LoginRequest;
@@ -104,5 +103,39 @@ public class AuthController {
   }
 
 // todo: make "/partnership" regis
+@PostMapping("/partnersignup")
+public ResponseEntity<MessageResponse> registerPartner( 
+  @RequestParam("name") String name,
+  @RequestParam("email") String email,
+  @RequestParam("address") String address,
+  @RequestParam("password") String password,
+  @RequestParam("file") MultipartFile file)
+  {
+
+  if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
+    return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+  }
+  if (partnerRepository.findByEmail(email).isPresent()) {
+    return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+  }
+
+  String fileName = fileStorageService.storeFile(file);
+  String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
+  .path(fileName).toUriString();
+
+  Partner partner = new Partner();
+
+  partner.setName(name);
+  partner.setAddress(address);
+  partner.setEmail(email);
+  partner.setPassword(encoder.encode(password));
+  partner.setImageUrl(fileDownloadUri);
+  partner.setActive(false);
+
+  partnerRepository.save(partner);
+
+  return ResponseEntity.ok(new MessageResponse("Partner registered successfully!"));
+
+}
 
 }
