@@ -1,6 +1,9 @@
 package com.lithan.mow.controller;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -8,6 +11,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +26,6 @@ import com.lithan.mow.payload.response.MessageResponse;
 import com.lithan.mow.repository.FeedbackRepository;
 import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.service.CustomerService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api")
@@ -37,7 +41,7 @@ public class MainController {
     @Autowired
     MealPackageRepository mealPackageRepository;
 
-    @GetMapping("/profile/me")
+    @GetMapping("/user/me")
     public CustomerResponse getProfile() {
         return new CustomerResponse(customerService.getCurrentUser());
     }
@@ -58,10 +62,28 @@ public class MainController {
 
     @GetMapping("/menu")
     public List<MealPackageRequest> getAllMenu() {
+        // get day name
+        Format f = new SimpleDateFormat("EEEE");
+        String today = f.format(new Date());
+
         List<MealPackageRequest> mealPackageList = new ArrayList<>();
-        mealPackageRepository.findAll().forEach(data -> mealPackageList.add(new MealPackageRequest(data)));
+
+        // return frozen meal on weekend
+        if (today.equalsIgnoreCase("monday") || today.equalsIgnoreCase("saturday")) {
+
+            mealPackageRepository.findByFrozen(true).forEach(data -> mealPackageList.add(new MealPackageRequest(data)));
+
+            return mealPackageList;
+        }
+        mealPackageRepository.findByFrozen(false).forEach(data -> mealPackageList.add(new MealPackageRequest(data)));
 
         return mealPackageList;
+    }
+
+    @GetMapping("menu/{id}")
+    public MealPackageRequest getMenu(@PathVariable Long id) {
+
+        return new MealPackageRequest(mealPackageRepository.findById(id).get());
     }
 
 }

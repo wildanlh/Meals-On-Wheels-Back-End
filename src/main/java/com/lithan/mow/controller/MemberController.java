@@ -23,7 +23,7 @@ import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.service.CustomerService;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+@PreAuthorize("hasRole('ROLE_MEMBER')")
 @RestController
 @RequestMapping("/api/member")
 @CrossOrigin(origins = "*", maxAge = 3600)
