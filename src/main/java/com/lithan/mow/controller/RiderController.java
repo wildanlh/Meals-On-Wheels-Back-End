@@ -54,7 +54,7 @@ public class RiderController {
         return orderList;
     }
 
-    @PostMapping("/order/{id}/deliver")
+    @GetMapping("/order/{id}/deliver")
     public MessageResponse deliverOrder(@PathVariable Long id) {
         Order order = orderRepository.findById(id).get();
         Customer raider = customerService.getCurrentUser();
@@ -69,7 +69,7 @@ public class RiderController {
         return new MessageResponse("deliver order_id: " + id);
     }
 
-    @PostMapping("/order/{id}/complete")
+    @GetMapping("/order/{id}/complete")
     public MessageResponse deliverOrderComplate(@PathVariable Long id) {
         Order order = orderRepository.findById(id).get();
         Customer raider = customerService.getCurrentUser();

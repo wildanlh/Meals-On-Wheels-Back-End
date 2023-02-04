@@ -52,7 +52,7 @@ public class PartnerController {
         return orderList;
     }
 
-    @PostMapping("/order/{id}/prepare")
+    @GetMapping("/order/{id}/prepare")
     public MessageResponse prepareOrder(@PathVariable Long id) {
         Order order = orderRepository.findById(id).get();
         Partner partner = customerService.getCurrentPartner();
@@ -67,7 +67,7 @@ public class PartnerController {
         return new MessageResponse("preparing order_id: " + id);
     }
 
-    @PostMapping("order/{id}/complete")
+    @GetMapping("order/{id}/complete")
     public MessageResponse prepareOrderComplate(@PathVariable Long id) {
         Order order = orderRepository.findById(id).get();
         Partner caregiver = customerService.getCurrentPartner();

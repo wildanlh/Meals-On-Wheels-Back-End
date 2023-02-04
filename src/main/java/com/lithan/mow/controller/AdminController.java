@@ -66,7 +66,7 @@ public class AdminController {
     return orderService.getOrderWithStatus(EStatus.PENDING);
   }
 
-  @PostMapping("/order/{orderId}/prepare/{partnerId}")
+  @GetMapping("/order/{orderId}/prepare/{partnerId}")
   public MessageResponse assignPartner(@PathVariable("orderId") Long orderId,
       @PathVariable("partnerId") Long partnerId) {
     Order order = orderRepository.findById(orderId).get();
@@ -86,7 +86,7 @@ public class AdminController {
     return orderService.getOrderWithStatus(EStatus.READY_TO_DELIVER);
   }
 
-  @PostMapping("/order/{orderId}/deliver/{riderId}")
+  @GetMapping("/order/{orderId}/deliver/{riderId}")
   public MessageResponse assignRider(@PathVariable("orderId") Long orderId, @PathVariable("riderId") Long riderId) {
     Order order = orderRepository.findById(orderId).get();
     order.setDeliveredBy(customerRepository.findById(riderId).get());
@@ -143,7 +143,7 @@ public class AdminController {
     return customerList;
   }
 
-  @PostMapping("/user/{id}/activate")
+  @GetMapping("/user/{id}/activate")
   public MessageResponse activateUser(@PathVariable Long id) {
     Customer user = customerRepository.findById(id).get();
     user.setActive(true);
@@ -160,7 +160,7 @@ public class AdminController {
     return customerList;
   }
 
-  @PostMapping("/partner/{id}/activate")
+  @GetMapping("/partner/{id}/activate")
   public MessageResponse activatePartner(@PathVariable Long id) {
     Partner partner = partnerRepository.findById(id).get();
     partner.setActive(true);
@@ -176,5 +176,7 @@ public class AdminController {
 
     return feedbackList;
   }
+
+  
 
 }
