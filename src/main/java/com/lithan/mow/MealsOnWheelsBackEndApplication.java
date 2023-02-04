@@ -40,12 +40,11 @@ public class MealsOnWheelsBackEndApplication {
 			if (customerRepository.count() > 1)
 				return;
 
-			List<Customer> customerList = new ArrayList<>();
-
 			Partner partner = new Partner();
 			partner.setName("wildan");
 			partner.setAddress("java, indonesia");
 			partner.setEmail("wildan@gmail.com");
+			partner.setActive(true);
 			partner.setPassword(passwordEncoder.encode("qwerty"));
 
 			partnerRepository.save(partner);
@@ -56,6 +55,7 @@ public class MealsOnWheelsBackEndApplication {
 			member.setGender(EGender.MALE);
 			member.setRole(ERole.ROLE_MEMBER);
 			member.setEmail("bagus@gmail.com");
+			member.setActive(true);
 			member.setPassword(passwordEncoder.encode("qwerty"));
 
 			Customer raider = new Customer();
@@ -64,6 +64,7 @@ public class MealsOnWheelsBackEndApplication {
 			raider.setGender(EGender.MALE);
 			raider.setRole(ERole.ROLE_RIDER);
 			raider.setEmail("stefansim@gmail.com");
+			raider.setActive(true);
 			raider.setPassword(passwordEncoder.encode("qwerty"));
 
 			Customer volunteer = new Customer();
@@ -72,6 +73,7 @@ public class MealsOnWheelsBackEndApplication {
 			volunteer.setGender(EGender.MALE);
 			volunteer.setRole(ERole.ROLE_VOLUNTEER);
 			volunteer.setEmail("norman@gmail.com");
+			volunteer.setActive(true);
 			volunteer.setPassword(passwordEncoder.encode("qwerty"));
 
 			Customer admin = new Customer();
@@ -80,11 +82,10 @@ public class MealsOnWheelsBackEndApplication {
 			admin.setGender(EGender.MALE);
 			admin.setRole(ERole.ROLE_ADMIN);
 			admin.setEmail("admin@gmail.com");
+			admin.setActive(true);
 			admin.setPassword(passwordEncoder.encode("qwerty"));
 
-			customerList.addAll(Arrays.asList(member, raider, volunteer, admin));
-
-			customerRepository.saveAll(customerList);
+			customerRepository.saveAll(Arrays.asList(member, raider, volunteer, admin));
 
 			MealPackage packageA = new MealPackage();
 			packageA.setDessert("puding");
@@ -93,6 +94,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageA.setPackageName("Package Ayam");
 			packageA.setSalad("kol");
 			packageA.setSoup("sayur bening");
+			packageA.setActive(true);
 
 			MealPackage packageB = new MealPackage();
 			packageB.setDessert("puding");
@@ -101,6 +103,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageB.setPackageName("Package Babi");
 			packageB.setSalad("kol");
 			packageB.setSoup("sayur bening");
+			packageB.setActive(true);
 
 			MealPackage packageC = new MealPackage();
 			packageC.setDessert("puding");
@@ -110,6 +113,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageC.setSalad("kol");
 			packageC.setSoup("sayur bening");
 			packageC.setFrozen(true);
+			packageC.setActive(true);
 
 			mealPackageRepository.saveAll(Arrays.asList(packageA, packageB, packageC));
 

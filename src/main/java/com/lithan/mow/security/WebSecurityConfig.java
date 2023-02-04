@@ -63,9 +63,7 @@ public class WebSecurityConfig {
         .antMatchers("/api/test/**").permitAll()
         .antMatchers("/api/file/**").permitAll()
         .antMatchers("/downloadFile/**").permitAll()
-  
-
-        // .anyRequest().authenticated()
+        .anyRequest().authenticated()
         .and()
         .httpBasic().disable()
         .formLogin().disable();
