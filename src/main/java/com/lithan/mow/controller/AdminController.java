@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.Order;
 import com.lithan.mow.model.Partner;
+import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.model.constraint.EStatus;
 import com.lithan.mow.payload.request.FeedbackRequest;
 import com.lithan.mow.payload.request.MealPackageRequest;
@@ -60,9 +61,12 @@ public class AdminController {
     return orderList;
   }
 
-  @GetMapping("/order/pending")
+  @GetMapping("/order")
   public List<OrderResponse> getPendingOrder() {
-    return orderService.getOrderWithStatus(EStatus.PENDING);
+    List<OrderResponse> orderList = new ArrayList<>();
+    orderList.addAll(orderService.getOrderWithStatus(EStatus.PENDING));
+    orderList.addAll(orderService.getOrderWithStatus(EStatus.READY_TO_DELIVER));
+    return orderList;
   }
 
   @GetMapping("/order/{orderId}/prepare/{partnerId}")
@@ -114,6 +118,14 @@ public class AdminController {
   public List<CustomerResponse> getUser() {
     List<CustomerResponse> customerList = new ArrayList<>();
     customerRepository.findAll().forEach(data -> customerList.add(new CustomerResponse(data)));
+
+    return customerList;
+  }
+
+  @GetMapping("/rider")
+  public List<CustomerResponse> getRider() {
+    List<CustomerResponse> customerList = new ArrayList<>();
+    customerRepository.findByRole(ERole.ROLE_RIDER).forEach(data -> customerList.add(new CustomerResponse(data)));
 
     return customerList;
   }
@@ -175,7 +187,5 @@ public class AdminController {
 
     return feedbackList;
   }
-
-  
 
 }
