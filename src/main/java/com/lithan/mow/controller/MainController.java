@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,12 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lithan.mow.model.Feedback;
 import com.lithan.mow.model.MealPackage;
+import com.lithan.mow.model.Partner;
+import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.payload.request.FeedbackRequest;
 import com.lithan.mow.payload.request.MealPackageRequest;
 import com.lithan.mow.payload.response.CustomerResponse;
 import com.lithan.mow.payload.response.MessageResponse;
 import com.lithan.mow.repository.FeedbackRepository;
 import com.lithan.mow.repository.MealPackageRepository;
+import com.lithan.mow.repository.PartnerRepository;
 import com.lithan.mow.service.CustomerService;
 
 @RestController
@@ -41,8 +45,20 @@ public class MainController {
     @Autowired
     MealPackageRepository mealPackageRepository;
 
+    @Autowired
+    PartnerRepository partnerRepository;
+
     @GetMapping("/user/me")
     public CustomerResponse getProfile() {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("currentuser: " + currentUserEmail);
+       
+        if (partnerRepository.findByEmail(currentUserEmail).isPresent()) {
+            Partner x = customerService.getCurrentPartner();
+            new CustomerResponse();
+            return CustomerResponse.builder().id(x.getId()).name(x.getName()).imageUrl(x.getImageUrl())
+                    .address(x.getAddress()).email(x.getEmail()).status(x.getStatus()).role(ERole.ROLE_PARTNER).build();
+        }
         return new CustomerResponse(customerService.getCurrentUser());
     }
 

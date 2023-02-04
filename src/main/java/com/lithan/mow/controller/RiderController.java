@@ -21,7 +21,7 @@ import com.lithan.mow.repository.CustomerRepository;
 import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.service.CustomerService;
 
-@PreAuthorize("hasAnyRole('ROLE_RAIDER','ROLE_VOLUNTEER')")
+@PreAuthorize("hasAnyRole('ROLE_RIDER','ROLE_VOLUNTEER')")
 @RestController
 @RequestMapping("/api/rider")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -40,6 +40,8 @@ public class RiderController {
     public List<OrderResponse> getOrder() {
         List<OrderResponse> orderList = new ArrayList<>();
         orderRepository.findByStatusAndDeliveredBy(EStatus.READY_TO_DELIVER, customerService.getCurrentUser())
+                .forEach(order -> orderList.add(new OrderResponse(order)));
+        orderRepository.findByStatusAndDeliveredBy(EStatus.ON_DELIVERY, customerService.getCurrentUser())
                 .forEach(order -> orderList.add(new OrderResponse(order)));
 
         return orderList;
