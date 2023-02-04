@@ -52,12 +52,12 @@ public class MemberController {
    @GetMapping("/order/all")
    public List<OrderResponse> getAllOrder() {
       List<OrderResponse> orderList = new ArrayList<>();
-      orderRepository.findByOrderdBy(customersService.getCurrentUser())
+      orderRepository.findByStatusAndOrderdBy(EStatus.ORDER_COMPLETE, customersService.getCurrentUser())
             .forEach(order -> orderList.add(new OrderResponse(order)));
       return orderList;
    }
 
-   @PostMapping("/order/{id}/create")
+   @GetMapping("/order/{id}/create")
    public MessageResponse orderMeal(@PathVariable Long id) {
       MealPackage meal = mealPackageRepository.findById(id).get();
 
@@ -72,7 +72,7 @@ public class MemberController {
       return new MessageResponse("You Have Successfully Requested an Order");
    }
 
-   @PostMapping("/order/{id}/complete")
+   @GetMapping("/order/{id}/complete")
    public MessageResponse complateOrder(@PathVariable Long id) {
       Order order = orderRepository.findById(id).get();
       order.setStatus(EStatus.ORDER_COMPLETE);
