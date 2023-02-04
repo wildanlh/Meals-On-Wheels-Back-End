@@ -40,6 +40,8 @@ public class PartnerController {
         List<OrderResponse> orderList = new ArrayList<>();
         orderRepository.findByStatusAndPreparedBy(EStatus.PENDING, customerService.getCurrentPartner())
                 .forEach(order -> orderList.add(new OrderResponse(order)));
+        orderRepository.findByStatusAndPreparedBy(EStatus.PREPARING, customerService.getCurrentPartner())
+                .forEach(order -> orderList.add(new OrderResponse(order)));
         return orderList;
     }
 
