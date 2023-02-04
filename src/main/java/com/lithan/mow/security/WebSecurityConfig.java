@@ -48,6 +48,7 @@ public class WebSecurityConfig {
   PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+  
 
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http, AuthEntryPoint unauthorizedHandler) throws Exception {
@@ -62,8 +63,9 @@ public class WebSecurityConfig {
         .antMatchers("/api/test/**").permitAll()
         .antMatchers("/api/file/**").permitAll()
         .antMatchers("/downloadFile/**").permitAll()
+  
 
-        .anyRequest().authenticated()
+        // .anyRequest().authenticated()
         .and()
         .httpBasic().disable()
         .formLogin().disable();

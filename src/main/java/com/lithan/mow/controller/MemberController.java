@@ -57,7 +57,7 @@ public class MemberController {
       return orderList;
    }
 
-   @PostMapping("/order/{id}/create")
+   @GetMapping("/order/{id}/create")
    public MessageResponse orderMeal(@PathVariable Long id) {
       MealPackage meal = mealPackageRepository.findById(id).get();
 
@@ -72,7 +72,7 @@ public class MemberController {
       return new MessageResponse("You Have Successfully Requested an Order");
    }
 
-   @PostMapping("/order/{id}/complete")
+   @GetMapping("/order/{id}/complete")
    public MessageResponse complateOrder(@PathVariable Long id) {
       Order order = orderRepository.findById(id).get();
       order.setStatus(EStatus.ORDER_COMPLETE);
