@@ -109,6 +109,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageC.setPackageName("Package Cetik");
 			packageC.setSalad("kol");
 			packageC.setSoup("sayur bening");
+			packageC.setFrozen(true);
 
 			mealPackageRepository.saveAll(Arrays.asList(packageA, packageB, packageC));
 
