@@ -31,8 +31,8 @@ public class Partner {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private ERole role;
+    // @Enumerated(EnumType.STRING)
+    // private ERole role;
 
     @Enumerated(EnumType.STRING)
     private EStatus status;
