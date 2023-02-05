@@ -139,8 +139,7 @@ public class AdminController {
     int customer = customerRepository.findByRoleAndActive(ERole.ROLE_MEMBER, true).size();
     int volunteer = customerRepository.findByRoleAndActive(ERole.ROLE_MEMBER, true).size();
 
-    return UserCountResponse.builder().totalPartner(partner).totalRider(rider).totalUser(customer)
-        .totalVolunteer(volunteer).build();
+    return new UserCountResponse(customer, volunteer, partner, rider);
   }
 
   @GetMapping("/rider")
@@ -160,7 +159,7 @@ public class AdminController {
     return partnerList;
   }
 
-  @GetMapping("/menu/all")
+  @GetMapping("/menu")
   public List<MealPackageRequest> getMeal() {
     List<MealPackageRequest> mealList = new ArrayList<>();
     mealPackRepository.findAll().forEach(data -> mealList.add(new MealPackageRequest(data)));
@@ -168,16 +167,23 @@ public class AdminController {
     return mealList;
   }
 
-  @GetMapping("/user/inactive")
-  public List<CustomerResponse> getInactiveUser() {
-    List<CustomerResponse> customerList = new ArrayList<>();
-    customerRepository.findByActive(false).forEach(data -> customerList.add(new CustomerResponse(data)));
+  // @GetMapping("/user/inactive")
+  // public List<CustomerResponse> getInactiveUser() {
+  //   List<CustomerResponse> customerList = new ArrayList<>();
+  //   customerRepository.findByActive(false).forEach(data -> customerList.add(new CustomerResponse(data)));
 
-    return customerList;
-  }
+  //   return customerList;
+  // }
 
   @GetMapping("/user/{id}/activate")
   public MessageResponse activateUser(@PathVariable Long id) {
+if(partnerRepository.findById(id).isPresent()) {
+  Partner partner = partnerRepository.findById(id).get();
+    partner.setActive(true);
+    partnerRepository.save(partner);
+    return new MessageResponse(String.format("activate partner with id: %d", id));
+}
+
     Customer user = customerRepository.findById(id).get();
     user.setActive(true);
     customerRepository.save(user);
@@ -185,22 +191,22 @@ public class AdminController {
     return new MessageResponse(String.format("activate user with id: %d", id));
   }
 
-  @GetMapping("/partner/inactive")
-  public List<PartnerResponse> getInactivePartner() {
-    List<PartnerResponse> customerList = new ArrayList<>();
-    partnerRepository.findByActive(false).forEach(data -> customerList.add(new PartnerResponse(data)));
+  // @GetMapping("/partner/inactive")
+  // public List<PartnerResponse> getInactivePartner() {
+  //   List<PartnerResponse> customerList = new ArrayList<>();
+  //   partnerRepository.findByActive(false).forEach(data -> customerList.add(new PartnerResponse(data)));
 
-    return customerList;
-  }
+  //   return customerList;
+  // }
 
-  @GetMapping("/partner/{id}/activate")
-  public MessageResponse activatePartner(@PathVariable Long id) {
-    Partner partner = partnerRepository.findById(id).get();
-    partner.setActive(true);
-    partnerRepository.save(partner);
+  // @GetMapping("/partner/{id}/activate")
+  // public MessageResponse activatePartner(@PathVariable Long id) {
+  //   Partner partner = partnerRepository.findById(id).get();
+  //   partner.setActive(true);
+  //   partnerRepository.save(partner);
 
-    return new MessageResponse(String.format("activate user with id: %d", id));
-  }
+  //   return new MessageResponse(String.format("activate user with id: %d", id));
+  // }
 
   @GetMapping("/feedback")
   public List<FeedbackRequest> getFeedback() {
