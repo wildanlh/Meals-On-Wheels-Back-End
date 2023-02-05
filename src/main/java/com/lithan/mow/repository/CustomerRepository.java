@@ -15,6 +15,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
    Boolean existsByEmail(String email);
 
    List<Customer> findByRole(ERole roles);
+
+   List<Customer> findByRoleAndActive(ERole roles, boolean active);
    
    List<Customer> findByRoleIsNot(ERole roles);
 

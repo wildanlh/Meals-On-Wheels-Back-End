@@ -1,5 +1,7 @@
 package com.lithan.mow.payload.response;
 
+import java.util.Comparator;
+
 import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.constraint.EGender;
 import com.lithan.mow.model.constraint.ERole;
@@ -24,6 +26,7 @@ public class CustomerResponse {
 
    public CustomerResponse() {
    }
+
    public CustomerResponse(Customer user) {
       this.id = user.getId();
       this.name = user.getName();
@@ -34,5 +37,16 @@ public class CustomerResponse {
       this.imageUrl = user.getImageUrl();
       this.role = user.getRole();
    }
+
+   public static final Comparator<CustomerResponse> comparatorByIdDesc = new Comparator<CustomerResponse>() {
+
+      public int compare(CustomerResponse s1, CustomerResponse s2) {
+         Long customer1 = s1.getId();
+         Long customer2 = s2.getId();
+
+         return customer2.compareTo(customer1);
+
+      }
+   };
 
 }

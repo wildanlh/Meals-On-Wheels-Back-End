@@ -1,5 +1,8 @@
 package com.lithan.mow.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.Partner;
+import com.lithan.mow.model.constraint.ERole;
+import com.lithan.mow.payload.response.CustomerResponse;
 import com.lithan.mow.repository.CustomerRepository;
 import com.lithan.mow.repository.PartnerRepository;
 
@@ -31,5 +36,11 @@ public class CustomerService {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("currentuser: " + currentUserEmail);
         return partnerRepository.findByEmail(currentUserEmail).get();
+    }
+
+    public List<CustomerResponse> getUserByRoleAndActive(ERole role, boolean active) {
+        List<CustomerResponse> orderList = new ArrayList<>();
+        customerRepository.findByRoleAndActive(role, active).forEach(data -> orderList.add(new CustomerResponse(data)));
+        return orderList;
     }
 }

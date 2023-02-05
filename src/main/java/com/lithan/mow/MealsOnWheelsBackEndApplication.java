@@ -113,33 +113,33 @@ public class MealsOnWheelsBackEndApplication {
 			packageC.setActive(true);
 
 			MealPackage packageD = new MealPackage();
-			packageC.setDessert("Tiramisu");
-			packageC.setDrink("Carrot Juice");
-			packageC.setMainCourse("Calzone Pizza");
-			packageC.setPackageName("Frozen Package 01");
-			packageC.setSalad("Green Salad");
-			packageC.setSoup("Miso Soup");
-			packageC.setFrozen(true);
-			packageC.setActive(true);
+			packageD.setDessert("Tiramisu");
+			packageD.setDrink("Carrot Juice");
+			packageD.setMainCourse("Calzone Pizza");
+			packageD.setPackageName("Frozen Package 01");
+			packageD.setSalad("Green Salad");
+			packageD.setSoup("Miso Soup");
+			packageD.setFrozen(true);
+			packageD.setActive(true);
 
 			MealPackage packageE = new MealPackage();
-			packageC.setDessert("Tiramisu");
-			packageC.setDrink("Orange Juice");
-			packageC.setMainCourse("Tempura with Red Rice Roll");
-			packageC.setPackageName("Frozen Package 02");
-			packageC.setSalad("Celery Salad");
-			packageC.setSoup("Miso Soup");
-			packageC.setFrozen(true);
-			packageC.setActive(true);
+			packageE.setDessert("Tiramisu");
+			packageE.setDrink("Orange Juice");
+			packageE.setMainCourse("Tempura with Red Rice Roll");
+			packageE.setPackageName("Frozen Package 02");
+			packageE.setSalad("Celery Salad");
+			packageE.setSoup("Miso Soup");
+			packageE.setFrozen(true);
+			packageE.setActive(true);
 
 			MealPackage packageF = new MealPackage();
-			packageB.setDessert("Assorted Nuts");
-			packageB.setDrink("Alvita Tea");
-			packageB.setMainCourse("Broiled Lamp Chop");
-			packageB.setPackageName("Meal Package 04");
-			packageB.setSalad("Rojak");
-			packageB.setSoup("5 Elements Soup");
-			packageB.setActive(true);
+			packageF.setDessert("Assorted Nuts");
+			packageF.setDrink("Alvita Tea");
+			packageF.setMainCourse("Broiled Lamp Chop");
+			packageF.setPackageName("Meal Package 04");
+			packageF.setSalad("Rojak");
+			packageF.setSoup("5 Elements Soup");
+			packageF.setActive(true);
 
 			mealPackageRepository.saveAll(Arrays.asList(packageA, packageB, packageC, packageD, packageE, packageF));
 
@@ -147,8 +147,14 @@ public class MealsOnWheelsBackEndApplication {
 			pending.setMealPackage(packageA);
 			pending.setOrderdBy(member);
 			pending.setOrderdOn(new Date());
-			pending.setPreparedBy(partner);
 			pending.setStatus(EStatus.PENDING);
+
+			Order pending2 = new Order();
+			pending2.setMealPackage(packageA);
+			pending2.setOrderdBy(member);
+			pending2.setOrderdOn(new Date());
+			pending2.setPreparedBy(partner);
+			pending2.setStatus(EStatus.PENDING);
 
 			Order prepare = new Order();
 			prepare.setMealPackage(packageB);
@@ -163,6 +169,14 @@ public class MealsOnWheelsBackEndApplication {
 			readyToDeliver.setOrderdOn(new Date());
 			readyToDeliver.setPreparedBy(partner);
 			readyToDeliver.setStatus(EStatus.READY_TO_DELIVER);
+
+			Order readyToDeliver2 = new Order();
+			readyToDeliver2.setMealPackage(packageC);
+			readyToDeliver2.setDeliveredBy(raider);
+			readyToDeliver2.setOrderdBy(member);
+			readyToDeliver2.setOrderdOn(new Date());
+			readyToDeliver2.setPreparedBy(partner);
+			readyToDeliver2.setStatus(EStatus.READY_TO_DELIVER);
 
 			Order onDeliver = new Order();
 			onDeliver.setDeliveredBy(raider);
@@ -188,7 +202,8 @@ public class MealsOnWheelsBackEndApplication {
 			order.setPreparedBy(partner);
 			order.setStatus(EStatus.ORDER_COMPLETE);
 
-			orderRepository.saveAll(Arrays.asList(pending, prepare, readyToDeliver, onDeliver, deliverComplate, order));
+			orderRepository.saveAll(Arrays.asList(pending, pending2, prepare, readyToDeliver, readyToDeliver2, onDeliver,
+					deliverComplate, order));
 
 		};
 	}

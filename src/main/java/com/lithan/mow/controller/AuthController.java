@@ -68,7 +68,7 @@ public class AuthController {
   public ResponseEntity<MessageResponse> registerUser(@RequestParam("name") String name,
       @RequestParam("address") String address, @RequestParam("gender") String gender, @RequestParam("role") String role,
       @RequestParam("email") String email, @RequestParam("password") String password,
-      @RequestParam("file") MultipartFile file) {
+      @RequestParam("file") MultipartFile file, @RequestParam("image") MultipartFile image) {
 
     if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
       return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
@@ -81,6 +81,10 @@ public class AuthController {
     String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
         .path(fileName).toUriString();
 
+    String imageName = fileStorageService.storeFile(image);
+    String imageDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
+        .path(imageName).toUriString();
+
     Customer user = new Customer();
     user.setName(name);
     user.setAddress(address);
@@ -89,6 +93,7 @@ public class AuthController {
     user.setEmail(email);
     user.setPassword(encoder.encode(password));
     user.setFileUrl(fileDownloadUri);
+    user.setImageUrl(imageDownloadUri);
     user.setStatus(EStatus.AVAILABLE);
 
     System.out.println(user);

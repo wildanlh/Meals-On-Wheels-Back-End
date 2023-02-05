@@ -22,9 +22,7 @@ public class Feedback {
 
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "meal_package")
-    private MealPackage mealPackage;
+    private int mealPackageId;
 
     private String feedback;
 }

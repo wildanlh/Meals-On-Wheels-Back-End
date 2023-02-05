@@ -51,7 +51,6 @@ public class MainController {
     @GetMapping("/user/me")
     public CustomerResponse getProfile() {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("currentuser: " + currentUserEmail);
        
         if (partnerRepository.findByEmail(currentUserEmail).isPresent()) {
             Partner x = customerService.getCurrentPartner();
@@ -62,14 +61,22 @@ public class MainController {
         return new CustomerResponse(customerService.getCurrentUser());
     }
 
-    @PostMapping("/feadback")
+    @GetMapping("/mealcount")
+    public List<MealPackage> postFeedback() {
+
+         List<MealPackage> allMeals = mealPackageRepository.findAll();
+
+        return allMeals;
+    }
+
+    @PostMapping("/feedback")
     public MessageResponse postFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest) {
 
         Feedback feedback = new Feedback();
-        feedback.setEmail(feedbackRequest.getEmail());
         feedback.setName(feedbackRequest.getName());
+        feedback.setEmail(feedbackRequest.getEmail());
+        feedback.setMealPackageId(feedbackRequest.getMealPackageId());
         feedback.setFeedback(feedbackRequest.getFeedback());
-        feedback.setMealPackage(new MealPackage(feedbackRequest.getMealPackage()));
 
         feedbackRepository.save(feedback);
 
