@@ -8,13 +8,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lithan.mow.model.Customer;
 import com.lithan.mow.model.Order;
 import com.lithan.mow.model.Partner;
+import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.model.constraint.EStatus;
 import com.lithan.mow.payload.request.FeedbackRequest;
 import com.lithan.mow.payload.request.MealPackageRequest;
@@ -61,12 +61,15 @@ public class AdminController {
     return orderList;
   }
 
-  @GetMapping("/order/pending")
+  @GetMapping("/order")
   public List<OrderResponse> getPendingOrder() {
-    return orderService.getOrderWithStatus(EStatus.PENDING);
+    List<OrderResponse> orderList = new ArrayList<>();
+    orderList.addAll(orderService.getOrderWithStatus(EStatus.PENDING));
+    orderList.addAll(orderService.getOrderWithStatus(EStatus.READY_TO_DELIVER));
+    return orderList;
   }
 
-  @PostMapping("/order/{orderId}/prepare/{partnerId}")
+  @GetMapping("/order/{orderId}/prepare/{partnerId}")
   public MessageResponse assignPartner(@PathVariable("orderId") Long orderId,
       @PathVariable("partnerId") Long partnerId) {
     Order order = orderRepository.findById(orderId).get();
@@ -86,7 +89,7 @@ public class AdminController {
     return orderService.getOrderWithStatus(EStatus.READY_TO_DELIVER);
   }
 
-  @PostMapping("/order/{orderId}/deliver/{riderId}")
+  @GetMapping("/order/{orderId}/deliver/{riderId}")
   public MessageResponse assignRider(@PathVariable("orderId") Long orderId, @PathVariable("riderId") Long riderId) {
     Order order = orderRepository.findById(orderId).get();
     order.setDeliveredBy(customerRepository.findById(riderId).get());
@@ -119,6 +122,14 @@ public class AdminController {
     return customerList;
   }
 
+  @GetMapping("/rider")
+  public List<CustomerResponse> getRider() {
+    List<CustomerResponse> customerList = new ArrayList<>();
+    customerRepository.findByRole(ERole.ROLE_RIDER).forEach(data -> customerList.add(new CustomerResponse(data)));
+
+    return customerList;
+  }
+
   @GetMapping("/partner")
   public List<PartnerResponse> getPartner() {
     List<PartnerResponse> partnerList = new ArrayList<>();
@@ -143,7 +154,7 @@ public class AdminController {
     return customerList;
   }
 
-  @PostMapping("/user/{id}/activate")
+  @GetMapping("/user/{id}/activate")
   public MessageResponse activateUser(@PathVariable Long id) {
     Customer user = customerRepository.findById(id).get();
     user.setActive(true);
@@ -160,7 +171,7 @@ public class AdminController {
     return customerList;
   }
 
-  @PostMapping("/partner/{id}/activate")
+  @GetMapping("/partner/{id}/activate")
   public MessageResponse activatePartner(@PathVariable Long id) {
     Partner partner = partnerRepository.findById(id).get();
     partner.setActive(true);

@@ -5,9 +5,13 @@ import com.lithan.mow.model.constraint.EGender;
 import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.model.constraint.EStatus;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class CustomerResponse {
    private Long id;
    private String name;
@@ -18,6 +22,8 @@ public class CustomerResponse {
    private String imageUrl;
    private ERole role;
 
+   public CustomerResponse() {
+   }
    public CustomerResponse(Customer user) {
       this.id = user.getId();
       this.name = user.getName();
@@ -28,4 +34,5 @@ public class CustomerResponse {
       this.imageUrl = user.getImageUrl();
       this.role = user.getRole();
    }
+
 }

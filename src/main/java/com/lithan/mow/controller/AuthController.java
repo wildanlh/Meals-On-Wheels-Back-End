@@ -61,20 +61,14 @@ public class AuthController {
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
     SecurityContextHolder.getContext().setAuthentication(auth);
 
-    return ResponseEntity
-        .ok(new JwtResponse(jwtUtils.generateJwtToken(auth)));
+    return ResponseEntity.ok(new JwtResponse(jwtUtils.generateJwtToken(auth),auth.getAuthorities().toString()));
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<MessageResponse> registerUser( 
-    @RequestParam("name") String name,
-    @RequestParam("address") String address,
-    @RequestParam("gender") String gender,
-    @RequestParam("role") String role,
-    @RequestParam("email") String email,
-    @RequestParam("password") String password,
-    @RequestParam("file") MultipartFile file) 
-    {
+  public ResponseEntity<MessageResponse> registerUser(@RequestParam("name") String name,
+      @RequestParam("address") String address, @RequestParam("gender") String gender, @RequestParam("role") String role,
+      @RequestParam("email") String email, @RequestParam("password") String password,
+      @RequestParam("file") MultipartFile file) {
 
     if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
       return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
@@ -85,7 +79,7 @@ public class AuthController {
 
     String fileName = fileStorageService.storeFile(file);
     String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
-    .path(fileName).toUriString();
+        .path(fileName).toUriString();
 
     Customer user = new Customer();
     user.setName(name);
@@ -104,40 +98,35 @@ public class AuthController {
 
   }
 
-// todo: make "/partnership" regis
-@PostMapping("/partnersignup")
-public ResponseEntity<MessageResponse> registerPartner( 
-  @RequestParam("name") String name,
-  @RequestParam("email") String email,
-  @RequestParam("address") String address,
-  @RequestParam("password") String password,
-  @RequestParam("file") MultipartFile file)
-  {
+  @PostMapping("/partner/signup")
+  public ResponseEntity<MessageResponse> registerPartner(@RequestParam("name") String name,
+      @RequestParam("email") String email, @RequestParam("address") String address,
+      @RequestParam("password") String password, @RequestParam("file") MultipartFile file) {
 
-  if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
-    return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+    if (Boolean.TRUE.equals(customerRepository.existsByEmail(email))) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+    }
+    if (partnerRepository.findByEmail(email).isPresent()) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
+    }
+
+    String fileName = fileStorageService.storeFile(file);
+    String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
+        .path(fileName).toUriString();
+
+    Partner partner = new Partner();
+
+    partner.setName(name);
+    partner.setAddress(address);
+    partner.setEmail(email);
+    partner.setPassword(encoder.encode(password));
+    partner.setImageUrl(fileDownloadUri);
+    partner.setActive(false);
+
+    partnerRepository.save(partner);
+
+    return ResponseEntity.ok(new MessageResponse("Partner registered successfully!"));
+
   }
-  if (partnerRepository.findByEmail(email).isPresent()) {
-    return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
-  }
-
-  String fileName = fileStorageService.storeFile(file);
-  String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
-  .path(fileName).toUriString();
-
-  Partner partner = new Partner();
-
-  partner.setName(name);
-  partner.setAddress(address);
-  partner.setEmail(email);
-  partner.setPassword(encoder.encode(password));
-  partner.setImageUrl(fileDownloadUri);
-  partner.setActive(false);
-
-  partnerRepository.save(partner);
-
-  return ResponseEntity.ok(new MessageResponse("Partner registered successfully!"));
-
-}
 
 }

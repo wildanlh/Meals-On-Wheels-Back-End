@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,7 +51,7 @@ public class MemberController {
    @GetMapping("/order/all")
    public List<OrderResponse> getAllOrder() {
       List<OrderResponse> orderList = new ArrayList<>();
-      orderRepository.findByOrderdBy(customersService.getCurrentUser())
+      orderRepository.findByStatusAndOrderdBy(EStatus.ORDER_COMPLETE, customersService.getCurrentUser())
             .forEach(order -> orderList.add(new OrderResponse(order)));
       return orderList;
    }
