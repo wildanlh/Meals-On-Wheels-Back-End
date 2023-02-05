@@ -41,6 +41,7 @@ public class MealsOnWheelsBackEndApplication {
 			partner.setName("wildan");
 			partner.setAddress("java, indonesia");
 			partner.setEmail("wildan@gmail.com");
+			// partner.setRole(ERole.ROLE_PARTNER);
 			partner.setActive(true);
 			partner.setPassword(passwordEncoder.encode("qwerty"));
 
