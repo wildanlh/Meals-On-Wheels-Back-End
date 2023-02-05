@@ -63,6 +63,7 @@ public class WebSecurityConfig {
         .antMatchers("/api/test/**").permitAll()
         .antMatchers("/api/file/**").permitAll()
         .antMatchers("/downloadFile/**").permitAll()
+        .antMatchers("/api/**").permitAll()
         .anyRequest().authenticated()
         .and()
         .httpBasic().disable()

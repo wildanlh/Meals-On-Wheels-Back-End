@@ -61,6 +61,28 @@ public class MainController {
         return new CustomerResponse(customerService.getCurrentUser());
     }
 
+    @GetMapping("/mealcount")
+    public List<MealPackage> postFeedback() {
+
+         List<MealPackage> allMeals = mealPackageRepository.findAll();
+
+        return allMeals;
+    }
+
+    @PostMapping("/feedback")
+    public MessageResponse postFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest) {
+
+        Feedback feedback = new Feedback();
+        feedback.setName(feedbackRequest.getName());
+        feedback.setEmail(feedbackRequest.getEmail());
+        feedback.setMealPackageId(feedbackRequest.getMealPackageId());
+        feedback.setFeedback(feedbackRequest.getFeedback());
+
+        feedbackRepository.save(feedback);
+
+        return new MessageResponse("thank for you feedback");
+    }
+
     @GetMapping("/menu")
     public List<MealPackageRequest> getAllMenu() {
         // get day name
