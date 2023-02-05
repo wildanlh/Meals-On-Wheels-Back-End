@@ -51,7 +51,6 @@ public class MainController {
     @GetMapping("/user/me")
     public CustomerResponse getProfile() {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("currentuser: " + currentUserEmail);
        
         if (partnerRepository.findByEmail(currentUserEmail).isPresent()) {
             Partner x = customerService.getCurrentPartner();
