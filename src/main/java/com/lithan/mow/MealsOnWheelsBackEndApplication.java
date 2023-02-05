@@ -108,11 +108,40 @@ public class MealsOnWheelsBackEndApplication {
 			packageC.setMainCourse("Japanese Curry Udon");
 			packageC.setPackageName("Meal Package 03");
 			packageC.setSalad("Mushroom Salad");
-			packageC.setSoup("sayur bening");
+			packageC.setSoup("Boiled Maca Soup");
 			packageC.setFrozen(true);
 			packageC.setActive(true);
 
-			mealPackageRepository.saveAll(Arrays.asList(packageA, packageB, packageC));
+			MealPackage packageD = new MealPackage();
+			packageC.setDessert("Tiramisu");
+			packageC.setDrink("Carrot Juice");
+			packageC.setMainCourse("Calzone Pizza");
+			packageC.setPackageName("Frozen Package 01");
+			packageC.setSalad("Green Salad");
+			packageC.setSoup("Miso Soup");
+			packageC.setFrozen(true);
+			packageC.setActive(true);
+
+			MealPackage packageE = new MealPackage();
+			packageC.setDessert("Tiramisu");
+			packageC.setDrink("Orange Juice");
+			packageC.setMainCourse("Tempura with Red Rice Roll");
+			packageC.setPackageName("Frozen Package 02");
+			packageC.setSalad("Celery Salad");
+			packageC.setSoup("Miso Soup");
+			packageC.setFrozen(true);
+			packageC.setActive(true);
+
+			MealPackage packageF = new MealPackage();
+			packageB.setDessert("Assorted Nuts");
+			packageB.setDrink("Alvita Tea");
+			packageB.setMainCourse("Broiled Lamp Chop");
+			packageB.setPackageName("Meal Package 04");
+			packageB.setSalad("Rojak");
+			packageB.setSoup("5 Elements Soup");
+			packageB.setActive(true);
+
+			mealPackageRepository.saveAll(Arrays.asList(packageA, packageB, packageC, packageD, packageE, packageF));
 
 			Order pending = new Order();
 			pending.setMealPackage(packageA);
