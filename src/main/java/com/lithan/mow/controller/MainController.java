@@ -62,14 +62,22 @@ public class MainController {
         return new CustomerResponse(customerService.getCurrentUser());
     }
 
-    @PostMapping("/feadback")
+    @GetMapping("/mealcount")
+    public List<MealPackage> postFeedback() {
+
+         List<MealPackage> allMeals = mealPackageRepository.findAll();
+
+        return allMeals;
+    }
+
+    @PostMapping("/feedback")
     public MessageResponse postFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest) {
 
         Feedback feedback = new Feedback();
-        feedback.setEmail(feedbackRequest.getEmail());
         feedback.setName(feedbackRequest.getName());
+        feedback.setEmail(feedbackRequest.getEmail());
+        feedback.setMealPackageId(feedbackRequest.getMealPackageId());
         feedback.setFeedback(feedbackRequest.getFeedback());
-        feedback.setMealPackage(new MealPackage(feedbackRequest.getMealPackage()));
 
         feedbackRepository.save(feedback);
 
