@@ -124,6 +124,14 @@ public class AdminController {
   public List<CustomerResponse> getUser() {
     List<CustomerResponse> customerList = new ArrayList<>();
     customerRepository.findAll().forEach(data -> customerList.add(new CustomerResponse(data)));
+    //
+    Collections.sort(customerList, CustomerResponse.comparatorByIdDesc);
+
+    return customerList;
+  }
+  @GetMapping("/partner")
+  public List<CustomerResponse> getPartner() {
+    List<CustomerResponse> customerList = new ArrayList<>();
     partnerRepository.findAll().forEach(
         x -> customerList.add(CustomerResponse.builder().id(x.getId()).name(x.getName()).imageUrl(x.getImageUrl())
             .address(x.getAddress()).email(x.getEmail()).status(x.getStatus()).role(ERole.ROLE_PARTNER).build()));
@@ -152,13 +160,13 @@ public class AdminController {
     return customerList;
   }
 
-  @GetMapping("/partner")
-  public List<PartnerResponse> getPartner() {
-    List<PartnerResponse> partnerList = new ArrayList<>();
-    partnerRepository.findByActive(true).forEach(data -> partnerList.add(new PartnerResponse(data)));
+  // @GetMapping("/partner")
+  // public List<PartnerResponse> getPartner() {
+  //   List<PartnerResponse> partnerList = new ArrayList<>();
+  //   partnerRepository.findByActive(true).forEach(data -> partnerList.add(new PartnerResponse(data)));
 
-    return partnerList;
-  }
+  //   return partnerList;
+  // }
 
   @GetMapping("/menu")
   public List<MealPackageRequest> getMeal() {
