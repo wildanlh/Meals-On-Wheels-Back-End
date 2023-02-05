@@ -40,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     Customer user = customerRepository.findByEmail(username)
     .orElseThrow(() -> new UsernameNotFoundException(username + " Not Found"));
     
-    if (!user.isActive() && !user.getRole().equals(ERole.ROLE_MEMBER)) throw new UserNotActiveException("your account is not active, please contact site admin");
+    if (!user.isActive()) throw new UserNotActiveException(String.valueOf(user.getRole()));
     return new User(user.getEmail(), user.getPassword(),
         Arrays.asList(new SimpleGrantedAuthority(user.getRole().toString())));
   }

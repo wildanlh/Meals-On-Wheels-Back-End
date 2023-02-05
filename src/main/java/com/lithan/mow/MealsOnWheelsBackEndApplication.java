@@ -85,29 +85,29 @@ public class MealsOnWheelsBackEndApplication {
 			customerRepository.saveAll(Arrays.asList(member, raider, volunteer, admin));
 
 			MealPackage packageA = new MealPackage();
-			packageA.setDessert("puding");
-			packageA.setDrink("cocacola");
-			packageA.setMainCourse("fried chiken");
-			packageA.setPackageName("Package Ayam");
-			packageA.setSalad("kol");
-			packageA.setSoup("sayur bening");
+			packageA.setDessert("Baked Apple");
+			packageA.setDrink("Peppermint Tea");
+			packageA.setMainCourse("Vegetable Plate");
+			packageA.setPackageName("Meal Package 01");
+			packageA.setSalad("Fruit Salad");
+			packageA.setSoup("Mushroom Soup");
 			packageA.setActive(true);
 
 			MealPackage packageB = new MealPackage();
-			packageB.setDessert("puding");
-			packageB.setDrink("cocacola");
-			packageB.setMainCourse("fried chiken");
-			packageB.setPackageName("Package Babi");
-			packageB.setSalad("kol");
-			packageB.setSoup("sayur bening");
+			packageB.setDessert("Stewed Fresh Fruits");
+			packageB.setDrink("Acidophilus Milk");
+			packageB.setMainCourse("Baked Fish");
+			packageB.setPackageName("Meal Package 02");
+			packageB.setSalad("Grilled Halloumi");
+			packageB.setSoup("Creamy Carrot Soup");
 			packageB.setActive(true);
 
 			MealPackage packageC = new MealPackage();
-			packageC.setDessert("puding");
-			packageC.setDrink("cocacola");
-			packageC.setMainCourse("fried chiken");
-			packageC.setPackageName("Package Cetik");
-			packageC.setSalad("kol");
+			packageC.setDessert("Mousse Dome");
+			packageC.setDrink("Lavendar Tea");
+			packageC.setMainCourse("Japanese Curry Udon");
+			packageC.setPackageName("Meal Package 03");
+			packageC.setSalad("Mushroom Salad");
 			packageC.setSoup("sayur bening");
 			packageC.setFrozen(true);
 			packageC.setActive(true);
