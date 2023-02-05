@@ -9,4 +9,5 @@ import com.lithan.mow.model.MealPackage;
 public interface MealPackageRepository extends JpaRepository<MealPackage, Long> {
 
   List<MealPackage> findByFrozen(boolean frozen);
+  List<MealPackage> findByFrozenAndActive(boolean frozen, boolean active);
 }
