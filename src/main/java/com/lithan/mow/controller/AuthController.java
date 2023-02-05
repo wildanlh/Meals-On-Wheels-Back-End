@@ -99,7 +99,7 @@ public class AuthController {
     System.out.println(user);
     customerRepository.save(user);
 
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    return ResponseEntity.ok(new MessageResponse("Register Success!"));
 
   }
 
