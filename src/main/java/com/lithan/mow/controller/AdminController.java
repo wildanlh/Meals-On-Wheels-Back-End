@@ -177,13 +177,6 @@ public class AdminController {
 
   @GetMapping("/user/{id}/activate")
   public MessageResponse activateUser(@PathVariable Long id) {
-if(partnerRepository.findById(id).isPresent()) {
-  Partner partner = partnerRepository.findById(id).get();
-    partner.setActive(true);
-    partnerRepository.save(partner);
-    return new MessageResponse(String.format("activate partner with id: %d", id));
-}
-
     Customer user = customerRepository.findById(id).get();
     user.setActive(true);
     customerRepository.save(user);
@@ -199,14 +192,14 @@ if(partnerRepository.findById(id).isPresent()) {
   //   return customerList;
   // }
 
-  // @GetMapping("/partner/{id}/activate")
-  // public MessageResponse activatePartner(@PathVariable Long id) {
-  //   Partner partner = partnerRepository.findById(id).get();
-  //   partner.setActive(true);
-  //   partnerRepository.save(partner);
+  @GetMapping("/partner/{id}/activate")
+  public MessageResponse activatePartner(@PathVariable Long id) {
+    Partner partner = partnerRepository.findById(id).get();
+    partner.setActive(true);
+    partnerRepository.save(partner);
 
-  //   return new MessageResponse(String.format("activate user with id: %d", id));
-  // }
+    return new MessageResponse(String.format("activate user with id: %d", id));
+  }
 
   @GetMapping("/feedback")
   public List<FeedbackRequest> getFeedback() {
