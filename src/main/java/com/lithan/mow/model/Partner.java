@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.lithan.mow.model.constraint.ERole;
 import com.lithan.mow.model.constraint.EStatus;
 
 import lombok.Data;
@@ -29,6 +30,9 @@ public class Partner {
     private String email;
 
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private ERole role;
 
     @Enumerated(EnumType.STRING)
     private EStatus status;
