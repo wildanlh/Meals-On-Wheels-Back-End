@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lithan.mow.model.Customer;
+import com.lithan.mow.model.MealPackage;
 import com.lithan.mow.model.Order;
 import com.lithan.mow.model.Partner;
 import com.lithan.mow.model.constraint.ERole;
@@ -207,6 +208,21 @@ public class AdminController {
     feedbackRepository.findAll().forEach(data -> feedbackList.add(new FeedbackRequest(data)));
 
     return feedbackList;
+  }
+
+  @GetMapping("/menu/{id}/active")
+  public MessageResponse activateMenu(@PathVariable Long id) {
+    MealPackage menu = mealPackRepository.findById(id).get();
+    menu.setActive(true);
+    mealPackRepository.save(menu);
+    return new MessageResponse("menu active: "+id);
+  }
+  @GetMapping("/menu/{id}/deactive")
+  public MessageResponse deactivateMenu(@PathVariable Long id) {
+    MealPackage menu = mealPackRepository.findById(id).get();
+    menu.setActive(false);
+    mealPackRepository.save(menu);
+    return new MessageResponse("menu deactive: "+id);
   }
 
 }

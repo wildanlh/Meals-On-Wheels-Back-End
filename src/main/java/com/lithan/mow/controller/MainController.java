@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,14 +96,26 @@ public class MainController {
         // return frozen meal on weekend
         if (today.equalsIgnoreCase("monday") || today.equalsIgnoreCase("saturday")) {
 
-            mealPackageRepository.findByFrozen(true).forEach(data -> mealPackageList.add(new MealPackageRequest(data)));
+            mealPackageRepository.findByFrozenAndActive(true, true).forEach(data -> mealPackageList.add(new MealPackageRequest(data)));
 
             return mealPackageList;
         }
-        mealPackageRepository.findByFrozen(false).forEach(data -> mealPackageList.add(new MealPackageRequest(data)));
+        mealPackageRepository.findByFrozenAndActive(false,true).forEach(data -> mealPackageList.add(new MealPackageRequest(data)));
 
         return mealPackageList;
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PARTNER')")
+    @PostMapping("menu/add")
+    public MessageResponse addMenu(@Valid @RequestBody MealPackageRequest menu) {
+      
+        MealPackage meal = new MealPackage(menu);
+        meal.setActive(true);
+        mealPackageRepository.save(meal);
+
+        return new MessageResponse("success add menu with name: "+ menu.getPackageName());
+    }
+
 
     @GetMapping("menu/{id}")
     public MealPackageRequest getMenu(@PathVariable Long id) {
