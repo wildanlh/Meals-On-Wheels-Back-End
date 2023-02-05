@@ -75,8 +75,10 @@ public class RiderController {
         Order order = orderRepository.findById(id).get();
         Customer raider = customerService.getCurrentUser();
 
+        if (orderRepository.findByStatusAndDeliveredBy(EStatus.ON_DELIVERY, raider).isEmpty())
+            raider.setStatus(EStatus.AVAILABLE);
+        
         order.setStatus(EStatus.DELIVERY_COMPLETE);
-        raider.setStatus(EStatus.AVAILABLE);
 
         orderRepository.save(order);
         customerRepository.save(raider);
