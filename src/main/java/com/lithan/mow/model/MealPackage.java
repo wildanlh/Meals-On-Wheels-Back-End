@@ -46,7 +46,7 @@ public class MealPackage {
       this.mainCourse = meal.getMainCourse();
       this.salad = meal.getSalad();
       this.soup = meal.getSoup();
-      this.dessert = meal.getSoup();
+      this.dessert = meal.getDessert();
       this.drink = meal.getDrink();
       this.packageImage = meal.getPackageImage();
    }
