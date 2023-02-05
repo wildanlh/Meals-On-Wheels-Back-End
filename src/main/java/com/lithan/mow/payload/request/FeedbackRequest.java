@@ -16,15 +16,19 @@ public class FeedbackRequest {
     @Email
     private String email;
 
-    private MealPackageRequest mealPackage;
+    private int mealPackageId;
 
     private String feedback;
+
+    public FeedbackRequest() {
+
+    }
 
     public FeedbackRequest(Feedback feedback) {
         this.id = feedback.getId();
         this.name = feedback.getName();
         this.email = feedback.getEmail();
-        this.mealPackage = new MealPackageRequest(feedback.getMealPackage());
+        this.mealPackageId = feedback.getMealPackageId();
         this.feedback = feedback.getFeedback();
     }
 
