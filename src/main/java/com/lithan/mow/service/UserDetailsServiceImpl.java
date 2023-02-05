@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     if (partnerRepository.findByEmail(username).isPresent()) {
       Partner data = partnerRepository.findByEmail(username).get();
-      if (!data.isActive()) throw new UserNotActiveException("your account is not active, please contact site admin");
+      if (!data.isActive()) throw new UserNotActiveException(ERole.ROLE_PARTNER.toString());
       return new User(data.getEmail(), data.getPassword(),
       Arrays.asList(new SimpleGrantedAuthority(ERole.ROLE_PARTNER.toString())));
     }
