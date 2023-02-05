@@ -73,7 +73,9 @@ public class PartnerController {
         Order order = orderRepository.findById(id).get();
         Partner caregiver = customerService.getCurrentPartner();
 
-        caregiver.setStatus(EStatus.AVAILABLE);
+        if (orderRepository.findByStatusAndPreparedBy(EStatus.ON_DELIVERY, caregiver).isEmpty())
+          caregiver.setStatus(EStatus.AVAILABLE);
+
         order.setStatus(EStatus.READY_TO_DELIVER);
 
         orderRepository.save(order);
