@@ -134,7 +134,7 @@ public class AdminController {
     List<CustomerResponse> customerList = new ArrayList<>();
     partnerRepository.findAll().forEach(
         x -> customerList.add(CustomerResponse.builder().id(x.getId()).name(x.getName()).imageUrl(x.getImageUrl())
-            .address(x.getAddress()).email(x.getEmail()).status(x.getStatus()).role(ERole.ROLE_PARTNER).activate(x.isActive()).build()));
+            .address(x.getAddress()).email(x.getEmail()).status(x.getStatus()).role(ERole.ROLE_PARTNER).active(x.isActive()).build()));
     Collections.sort(customerList, CustomerResponse.comparatorByIdDesc);
 
     return customerList;
