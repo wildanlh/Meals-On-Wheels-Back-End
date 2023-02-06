@@ -99,7 +99,7 @@ public class AuthController {
     System.out.println(user);
     customerRepository.save(user);
 
-    return ResponseEntity.ok(new MessageResponse("Register Success!"));
+    return ResponseEntity.ok(new MessageResponse("Register Success! Our Admin Will Process Your Information"));
 
   }
 
@@ -130,7 +130,7 @@ public class AuthController {
 
     partnerRepository.save(partner);
 
-    return ResponseEntity.ok(new MessageResponse("Partner registered successfully!"));
+    return ResponseEntity.ok(new MessageResponse("Thank You for Your Trust to Partner with Us! Admin Will Process Your Information"));
 
   }
 
