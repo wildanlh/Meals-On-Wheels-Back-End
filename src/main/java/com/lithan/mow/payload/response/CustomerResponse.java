@@ -17,14 +17,14 @@ import lombok.Data;
 public class CustomerResponse {
    private Long id;
    private String name;
+   private boolean active;
    private String email;
    private String address;
-   private EGender gander;
+   private EGender gender;
    private EStatus status;
    private String imageUrl;
    private ERole role;
    private String fileUrl;
-   private boolean activate;
 
    public CustomerResponse() {
    }
@@ -32,14 +32,14 @@ public class CustomerResponse {
    public CustomerResponse(Customer user) {
       this.id = user.getId();
       this.name = user.getName();
+      this.active = user.isActive();
       this.email = user.getEmail();
       this.address = user.getAddress();
-      this.gander = user.getGender();
+      this.gender = user.getGender();
       this.status = user.getStatus();
       this.imageUrl = user.getImageUrl();
       this.role = user.getRole();
       this.fileUrl = user.getFileUrl();
-      this.activate = user.isActive();
    }
 
    public static final Comparator<CustomerResponse> comparatorByIdDesc = new Comparator<CustomerResponse>() {
