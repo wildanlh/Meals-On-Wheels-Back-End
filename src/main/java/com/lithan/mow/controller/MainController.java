@@ -123,7 +123,7 @@ public class MainController {
       
         boolean frozenBool = false;
 
-        if (frozen == "1") {
+        if (frozen.equals("1")) {
             frozenBool = true;
         }
 
