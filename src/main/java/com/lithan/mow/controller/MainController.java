@@ -94,7 +94,7 @@ public class MainController {
         List<MealPackageRequest> mealPackageList = new ArrayList<>();
 
         // return frozen meal on weekend
-        if (today.equalsIgnoreCase("monday") || today.equalsIgnoreCase("saturday")) {
+        if (today.equalsIgnoreCase("sunday") || today.equalsIgnoreCase("saturday")) {
 
             mealPackageRepository.findByFrozenAndActive(true, true).forEach(data -> mealPackageList.add(new MealPackageRequest(data)));
 
