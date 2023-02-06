@@ -144,9 +144,9 @@ public class AdminController {
   public UserCountResponse getUserCount() {
 
     int partner = partnerRepository.findByActive(true).size();
-    int rider = customerRepository.findByRoleAndActive(ERole.ROLE_MEMBER, true).size();
+    int rider = customerRepository.findByRoleAndActive(ERole.ROLE_RIDER, true).size();
     int customer = customerRepository.findByRoleAndActive(ERole.ROLE_MEMBER, true).size();
-    int volunteer = customerRepository.findByRoleAndActive(ERole.ROLE_MEMBER, true).size();
+    int volunteer = customerRepository.findByRoleAndActive(ERole.ROLE_VOLUNTEER, true).size();
 
     return new UserCountResponse(customer, volunteer, partner, rider);
   }
