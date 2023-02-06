@@ -44,6 +44,8 @@ public class MealsOnWheelsBackEndApplication {
 			// partner.setRole(ERole.ROLE_PARTNER);
 			partner.setActive(true);
 			partner.setPassword(passwordEncoder.encode("qwerty"));
+			partner.setStatus(EStatus.AVAILABLE);
+			partner.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
 
 			partnerRepository.save(partner);
 
@@ -55,6 +57,9 @@ public class MealsOnWheelsBackEndApplication {
 			member.setEmail("bagus@gmail.com");
 			member.setActive(true);
 			member.setPassword(passwordEncoder.encode("qwerty"));
+			member.setStatus(EStatus.AVAILABLE);
+			member.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
+			member.setFileUrl("http://localhost:8080/api/file/downloadFile/certificate.jpeg");
 
 			Customer raider = new Customer();
 			raider.setName("stefansim");
@@ -64,6 +69,9 @@ public class MealsOnWheelsBackEndApplication {
 			raider.setEmail("stefansim@gmail.com");
 			raider.setActive(true);
 			raider.setPassword(passwordEncoder.encode("qwerty"));
+			raider.setStatus(EStatus.AVAILABLE);
+			raider.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
+			raider.setFileUrl("http://localhost:8080/api/file/downloadFile/certificate.jpeg");
 
 			Customer volunteer = new Customer();
 			volunteer.setName("norman");
@@ -73,6 +81,9 @@ public class MealsOnWheelsBackEndApplication {
 			volunteer.setEmail("norman@gmail.com");
 			volunteer.setActive(true);
 			volunteer.setPassword(passwordEncoder.encode("qwerty"));
+			volunteer.setStatus(EStatus.AVAILABLE);
+			volunteer.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
+			volunteer.setFileUrl("http://localhost:8080/api/file/downloadFile/certificate.jpeg");
 
 			Customer admin = new Customer();
 			admin.setName("admin");
@@ -82,6 +93,9 @@ public class MealsOnWheelsBackEndApplication {
 			admin.setEmail("admin@gmail.com");
 			admin.setActive(true);
 			admin.setPassword(passwordEncoder.encode("qwerty"));
+			admin.setStatus(EStatus.AVAILABLE);
+			admin.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
+			admin.setFileUrl("http://localhost:8080/api/file/downloadFile/certificate.jpeg");
 
 			customerRepository.saveAll(Arrays.asList(member, raider, volunteer, admin));
 
@@ -93,6 +107,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageA.setSalad("Fruit Salad");
 			packageA.setSoup("Mushroom Soup");
 			packageA.setActive(true);
+			packageA.setPackageImage("http://localhost:8080/api/file/downloadFile/VegetablePlate.jpeg");
 
 			MealPackage packageB = new MealPackage();
 			packageB.setDessert("Stewed Fresh Fruits");
@@ -102,6 +117,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageB.setSalad("Grilled Halloumi");
 			packageB.setSoup("Creamy Carrot Soup");
 			packageB.setActive(true);
+			packageB.setPackageImage("http://localhost:8080/api/file/downloadFile/Baked%20Fish.jpeg");
 
 			MealPackage packageC = new MealPackage();
 			packageC.setDessert("Mousse Dome");
@@ -112,6 +128,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageC.setSoup("Boiled Maca Soup");
 			packageC.setFrozen(true);
 			packageC.setActive(true);
+			packageC.setPackageImage("http://localhost:8080/api/file/downloadFile/Japanese%20Curry%20Udon.jpeg");
 
 			MealPackage packageD = new MealPackage();
 			packageD.setDessert("Tiramisu");
@@ -122,6 +139,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageD.setSoup("Miso Soup");
 			packageD.setFrozen(true);
 			packageD.setActive(true);
+			packageD.setPackageImage("http://localhost:8080/api/file/downloadFile/Calzone%20Pizza.jpeg");
 
 			MealPackage packageE = new MealPackage();
 			packageE.setDessert("Tiramisu");
@@ -132,6 +150,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageE.setSoup("Miso Soup");
 			packageE.setFrozen(true);
 			packageE.setActive(true);
+			packageE.setPackageImage("http://localhost:8080/api/file/downloadFile/Tempura%20with%20Red%20Rice%20Roll.jpeg");
 
 			MealPackage packageF = new MealPackage();
 			packageF.setDessert("Assorted Nuts");
@@ -141,6 +160,7 @@ public class MealsOnWheelsBackEndApplication {
 			packageF.setSalad("Rojak");
 			packageF.setSoup("5 Elements Soup");
 			packageF.setActive(true);
+			packageF.setPackageImage("http://localhost:8080/api/file/downloadFile/Broiled%20Lamp%20Chop.jpeg");
 
 			mealPackageRepository.saveAll(Arrays.asList(packageA, packageB, packageC, packageD, packageE, packageF));
 
