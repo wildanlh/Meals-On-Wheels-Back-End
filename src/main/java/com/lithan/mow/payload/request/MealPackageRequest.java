@@ -23,6 +23,8 @@ public class MealPackageRequest {
 
     private String packageImage;
 
+    private boolean frozen;
+
     public MealPackageRequest(MealPackage meal) {
         this.id = meal.getId();
         this.packageName = meal.getPackageName();
@@ -31,6 +33,7 @@ public class MealPackageRequest {
         this.soup = meal.getSoup();
         this.dessert = meal.getDessert();
         this.drink = meal.getDrink();
+        this.frozen =  meal.isFrozen();
         this.packageImage = meal.getPackageImage();
     }
 
