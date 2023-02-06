@@ -38,7 +38,7 @@ public class MealsOnWheelsBackEndApplication {
 				return;
 
 			Partner partner = new Partner();
-			partner.setName("wildan");
+			partner.setName("Wildan Company");
 			partner.setAddress("java, indonesia");
 			partner.setEmail("wildan@gmail.com");
 			// partner.setRole(ERole.ROLE_PARTNER);
@@ -61,17 +61,17 @@ public class MealsOnWheelsBackEndApplication {
 			member.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
 			member.setFileUrl("http://localhost:8080/api/file/downloadFile/certificate.jpeg");
 
-			Customer raider = new Customer();
-			raider.setName("stefansim");
-			raider.setAddress("bali, indonesia");
-			raider.setGender(EGender.MALE);
-			raider.setRole(ERole.ROLE_RIDER);
-			raider.setEmail("stefansim@gmail.com");
-			raider.setActive(true);
-			raider.setPassword(passwordEncoder.encode("qwerty"));
-			raider.setStatus(EStatus.AVAILABLE);
-			raider.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
-			raider.setFileUrl("http://localhost:8080/api/file/downloadFile/certificate.jpeg");
+			Customer rider = new Customer();
+			rider.setName("stefansim");
+			rider.setAddress("bali, indonesia");
+			rider.setGender(EGender.MALE);
+			rider.setRole(ERole.ROLE_RIDER);
+			rider.setEmail("stefansim@gmail.com");
+			rider.setActive(true);
+			rider.setPassword(passwordEncoder.encode("qwerty"));
+			rider.setStatus(EStatus.AVAILABLE);
+			rider.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
+			rider.setFileUrl("http://localhost:8080/api/file/downloadFile/certificate.jpeg");
 
 			Customer volunteer = new Customer();
 			volunteer.setName("norman");
@@ -97,7 +97,7 @@ public class MealsOnWheelsBackEndApplication {
 			admin.setImageUrl("http://localhost:8080/api/file/downloadFile/avatar.jpeg");
 			admin.setFileUrl("http://localhost:8080/api/file/downloadFile/certificate.jpeg");
 
-			customerRepository.saveAll(Arrays.asList(member, raider, volunteer, admin));
+			customerRepository.saveAll(Arrays.asList(member, rider, volunteer, admin));
 
 			MealPackage packageA = new MealPackage();
 			packageA.setDessert("Baked Apple");
@@ -193,14 +193,14 @@ public class MealsOnWheelsBackEndApplication {
 
 			Order readyToDeliver2 = new Order();
 			readyToDeliver2.setMealPackage(packageC);
-			readyToDeliver2.setDeliveredBy(raider);
+			readyToDeliver2.setDeliveredBy(rider);
 			readyToDeliver2.setOrderdBy(member);
 			readyToDeliver2.setOrderdOn(new Date());
 			readyToDeliver2.setPreparedBy(partner);
 			readyToDeliver2.setStatus(EStatus.READY_TO_DELIVER);
 
 			Order onDeliver = new Order();
-			onDeliver.setDeliveredBy(raider);
+			onDeliver.setDeliveredBy(rider);
 			onDeliver.setMealPackage(packageA);
 			onDeliver.setOrderdBy(member);
 			onDeliver.setOrderdOn(new Date());
@@ -208,7 +208,7 @@ public class MealsOnWheelsBackEndApplication {
 			onDeliver.setStatus(EStatus.ON_DELIVERY);
 
 			Order deliverComplate = new Order();
-			deliverComplate.setDeliveredBy(raider);
+			deliverComplate.setDeliveredBy(rider);
 			deliverComplate.setMealPackage(packageB);
 			deliverComplate.setOrderdBy(member);
 			deliverComplate.setOrderdOn(new Date());
@@ -216,7 +216,7 @@ public class MealsOnWheelsBackEndApplication {
 			deliverComplate.setStatus(EStatus.DELIVERY_COMPLETE);
 
 			Order order = new Order();
-			order.setDeliveredBy(raider);
+			order.setDeliveredBy(rider);
 			order.setMealPackage(packageC);
 			order.setOrderdBy(member);
 			order.setOrderdOn(new Date());
