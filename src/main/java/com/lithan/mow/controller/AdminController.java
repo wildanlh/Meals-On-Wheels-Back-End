@@ -33,7 +33,7 @@ import com.lithan.mow.repository.OrderRepository;
 import com.lithan.mow.repository.PartnerRepository;
 import com.lithan.mow.service.OrderService;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CAREGIVER')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CAREGIVER','ROLE_PARTNER')")
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*", maxAge = 3600)
