@@ -12,13 +12,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lithan.mow.model.Feedback;
 import com.lithan.mow.model.MealPackage;
@@ -32,6 +36,7 @@ import com.lithan.mow.repository.FeedbackRepository;
 import com.lithan.mow.repository.MealPackageRepository;
 import com.lithan.mow.repository.PartnerRepository;
 import com.lithan.mow.service.CustomerService;
+import com.lithan.mow.service.FileStorageService;
 
 @RestController
 @RequestMapping("/api")
@@ -49,6 +54,9 @@ public class MainController {
 
     @Autowired
     PartnerRepository partnerRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping("/user/me")
     public CustomerResponse getProfile() {
@@ -107,15 +115,36 @@ public class MainController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PARTNER')")
     @PostMapping("menu/add")
-    public MessageResponse addMenu(@Valid @RequestBody MealPackageRequest menu) {
+    public MessageResponse addMenu(@RequestParam("packageName") String packageName,
+    @RequestParam("mainCourse") String mainCourse, @RequestParam("salad") String salad, 
+    @RequestParam("soup") String soup,
+    @RequestParam("dessert") String dessert, @RequestParam("drink") String drink,
+    @RequestParam("frozen") String frozen, @RequestParam("packageImage") MultipartFile packageImage) {
       
-        MealPackage meal = new MealPackage(menu);
+        boolean frozenBool = false;
+
+        if (frozen.equals("1")) {
+            frozenBool = true;
+        }
+
+        String imageName = fileStorageService.storeFile(packageImage);
+        String imageDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
+            .path(imageName).toUriString();
+
+        MealPackage meal = new MealPackage();
+        meal.setPackageName(packageName);
+        meal.setMainCourse(mainCourse);
+        meal.setSalad(salad);
+        meal.setSoup(soup);
+        meal.setDessert(dessert);
+        meal.setDrink(drink);
+        meal.setFrozen(frozenBool);
+        meal.setPackageImage(imageDownloadUri);
         meal.setActive(true);
         mealPackageRepository.save(meal);
 
-        return new MessageResponse("success add menu with name: "+ menu.getPackageName());
+        return new MessageResponse("success add menu with name: "+ meal.getPackageName());
     }
-
 
     @GetMapping("menu/{id}")
     public MealPackageRequest getMenu(@PathVariable Long id) {

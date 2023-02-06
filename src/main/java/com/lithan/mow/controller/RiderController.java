@@ -86,4 +86,26 @@ public class RiderController {
         return new MessageResponse("deliver order_id: " + id);
     }
 
+    @GetMapping("/status/{statuscode}")
+    public MessageResponse setStatus(@PathVariable Long statuscode) {
+        Customer rider = customerService.getCurrentUser();
+
+        EStatus status = null;
+        if (statuscode == 1) {
+            status = EStatus.AVAILABLE;
+        }
+        if (statuscode == 2) {
+            status = EStatus.BUSY;
+        }
+        if (statuscode == 3) {
+            status = EStatus.NOT_AVAILABLE;
+        }
+
+        rider.setStatus(status);
+        customerRepository.save(rider);
+        System.out.println(rider.getStatus());
+
+        return new MessageResponse("Status set: " + status );
+    }
+
 }

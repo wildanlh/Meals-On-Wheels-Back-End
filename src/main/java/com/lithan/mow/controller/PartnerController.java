@@ -81,7 +81,7 @@ public class PartnerController {
         orderRepository.save(order);
         partnerRepository.save(caregiver);
 
-        return new MessageResponse("preparing order_id: " + id + " compalte");
+        return new MessageResponse("preparing order_id: " + id + " complete");
     }
 
 }
