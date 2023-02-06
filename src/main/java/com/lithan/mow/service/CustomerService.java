@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.lithan.mow.model.Customer;
@@ -29,13 +30,13 @@ public class CustomerService {
     public Customer getCurrentUser() {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("currentuser: " + currentUserEmail);
-        return customerRepository.findByEmail(currentUserEmail).get();
+        return customerRepository.findByEmail(currentUserEmail).orElseThrow(()-> new UsernameNotFoundException("current user not found"));
     }
 
     public Partner getCurrentPartner() {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("currentuser: " + currentUserEmail);
-        return partnerRepository.findByEmail(currentUserEmail).get();
+        return partnerRepository.findByEmail(currentUserEmail).orElseThrow(()-> new UsernameNotFoundException("current user not found"));
     }
 
     public List<CustomerResponse> getUserByRoleAndActive(ERole role, boolean active) {

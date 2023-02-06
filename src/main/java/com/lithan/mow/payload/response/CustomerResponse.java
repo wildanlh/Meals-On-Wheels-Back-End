@@ -23,6 +23,7 @@ public class CustomerResponse {
    private EStatus status;
    private String imageUrl;
    private ERole role;
+   private String fileUrl;
 
    public CustomerResponse() {
    }
@@ -36,6 +37,7 @@ public class CustomerResponse {
       this.status = user.getStatus();
       this.imageUrl = user.getImageUrl();
       this.role = user.getRole();
+      this.fileUrl = user.getFileUrl();
    }
 
    public static final Comparator<CustomerResponse> comparatorByIdDesc = new Comparator<CustomerResponse>() {

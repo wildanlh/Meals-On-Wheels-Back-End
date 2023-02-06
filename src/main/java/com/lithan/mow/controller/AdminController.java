@@ -123,7 +123,7 @@ public class AdminController {
   @GetMapping("/user")
   public List<CustomerResponse> getUser() {
     List<CustomerResponse> customerList = new ArrayList<>();
-    customerRepository.findAll().forEach(data -> customerList.add(new CustomerResponse(data)));
+    customerRepository.findByRoleIsNot(ERole.ROLE_ADMIN).forEach(data -> customerList.add(new CustomerResponse(data)));
     //
     Collections.sort(customerList, CustomerResponse.comparatorByIdDesc);
 
