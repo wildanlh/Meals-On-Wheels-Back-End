@@ -146,27 +146,6 @@ public class MainController {
         return new MessageResponse("success add menu with name: "+ meal.getPackageName());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PARTNER')")
-    @PostMapping("/signup")
-    public ResponseEntity<MessageResponse> menuAdd(@RequestParam("name") String name,
-        @RequestParam("address") String address, @RequestParam("gender") String gender, @RequestParam("role") String role,
-        @RequestParam("email") String email, @RequestParam("password") String password,
-        @RequestParam("file") MultipartFile file, @RequestParam("image") MultipartFile image) {
-  
-  
-      String fileName = fileStorageService.storeFile(file);
-      String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
-          .path(fileName).toUriString();
-  
-      String imageName = fileStorageService.storeFile(image);
-      String imageDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/file/downloadFile/")
-          .path(imageName).toUriString();
-  
-      return ResponseEntity.ok(new MessageResponse("Register Success! Our Admin Will Process Your Information"));
-  
-    }
-
-
     @GetMapping("menu/{id}")
     public MealPackageRequest getMenu(@PathVariable Long id) {
 
