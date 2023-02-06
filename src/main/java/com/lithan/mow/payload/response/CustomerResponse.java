@@ -25,6 +25,7 @@ public class CustomerResponse {
    private String imageUrl;
    private ERole role;
    private String fileUrl;
+   private boolean activate;
 
    public CustomerResponse() {
    }
@@ -40,6 +41,7 @@ public class CustomerResponse {
       this.imageUrl = user.getImageUrl();
       this.role = user.getRole();
       this.fileUrl = user.getFileUrl();
+      this.activate = user.isActive();
    }
 
    public static final Comparator<CustomerResponse> comparatorByIdDesc = new Comparator<CustomerResponse>() {

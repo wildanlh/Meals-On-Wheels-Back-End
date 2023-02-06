@@ -48,6 +48,7 @@ public class MealPackage {
       this.soup = meal.getSoup();
       this.dessert = meal.getDessert();
       this.drink = meal.getDrink();
+      this.frozen = meal.isFrozen();
       this.packageImage = meal.getPackageImage();
    }
 
