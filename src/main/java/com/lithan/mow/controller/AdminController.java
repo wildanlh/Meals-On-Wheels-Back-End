@@ -193,6 +193,22 @@ public class AdminController {
     return new MessageResponse(String.format("activate user with id: %d", id));
   }
 
+  @GetMapping("/user/{id}/{rolecode}")
+  public MessageResponse assignVolunteerRole(@PathVariable Long id, @PathVariable Long rolecode) {
+    Customer user = customerRepository.findById(id).get();
+    user.setActive(true);
+    ERole role = null;
+    if(rolecode == 1) {
+      role = ERole.ROLE_RIDER;
+    } else {
+      role = ERole.ROLE_CAREGIVER;
+    }
+    user.setRole(role);
+    customerRepository.save(user);
+
+    return new MessageResponse(String.format("Assigned volunteer with id: %d", id));
+  }
+
   // @GetMapping("/partner/inactive")
   // public List<PartnerResponse> getInactivePartner() {
   //   List<PartnerResponse> customerList = new ArrayList<>();
