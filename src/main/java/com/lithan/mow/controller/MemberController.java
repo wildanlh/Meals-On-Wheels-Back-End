@@ -51,7 +51,7 @@ public class MemberController {
    @GetMapping("/order/all")
    public List<OrderResponse> getAllOrder() {
       List<OrderResponse> orderList = new ArrayList<>();
-      orderRepository.findByStatusAndOrderdBy(EStatus.ORDER_COMPLETE, customersService.getCurrentUser())
+      orderRepository.findByStatusAndOrderdBy(EStatus.DELIVERY_COMPLETE, customersService.getCurrentUser())
             .forEach(order -> orderList.add(new OrderResponse(order)));
       return orderList;
    }

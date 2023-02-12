@@ -221,7 +221,7 @@ public class MealsOnWheelsBackEndApplication {
 			order.setOrderdBy(member);
 			order.setOrderdOn(new Date());
 			order.setPreparedBy(partner);
-			order.setStatus(EStatus.ORDER_COMPLETE);
+			order.setStatus(EStatus.DELIVERY_COMPLETE);
 
 			orderRepository.saveAll(Arrays.asList(pending, pending2, prepare, readyToDeliver, readyToDeliver2, onDeliver,
 					deliverComplate, order));
